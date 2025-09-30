@@ -34,7 +34,8 @@ async function m_busca_pokemon(n){
     pokemon.innerHTML = `
         <div class="m_barra_pesq">
             <img src="img/lupa.svg" alt="lupa">
-            <input type="text" placeholder="Buscar Pokémon por nome, numero....">
+            <input type="text" placeholder="Buscar Pokémon por nome, numero...." id="m_pesquisa">
+            <button onclick="m_pesquisa()">Buscar</button>
         </div>
         <div class="m_poke_titulo">
             <h2>Pokémon</h2>
@@ -128,6 +129,11 @@ async function m_busca_pokemon(n){
     }
     m_busca_evo(null);
     m_evo = [];
+    document.getElementById("m_pesquisa").addEventListener("keydown", function(m_enter) {
+    if (m_enter.key === "Enter") {
+        m_pesquisa();
+    }
+});
 }
 function m_poke_antes(){
     if(m_poke_id < 1){
@@ -254,5 +260,16 @@ async function m_busca_evo(nome){
         `).join("")}
     </div>`;
 }
+async function  m_pesquisa(){
+    let m_pesq = document.getElementById("m_pesquisa").value;
+    let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${m_pesq}`);
+    let dados = await resposta.json();
+    m_busca_pokemon(dados.id);
+}
 m_index_poke(m_calculo_pag());
 m_busca_id();
+document.getElementById("m_pesquisa").addEventListener("keydown", function(m_enter) {
+    if (m_enter.key === "Enter") {
+        m_pesquisa();
+    }
+});

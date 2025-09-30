@@ -121,7 +121,7 @@ header{
 }
 .m_poke_titulo{
     color: #444444;
-    padding-top: 5rem;
+    padding-top: 2rem;
     padding-left: 10rem;
     font-family: var(--mont);
     margin-left: -3rem;
@@ -453,20 +453,41 @@ header{
 /* barra de pesquisa */
 .m_barra_pesq{
     display: flex;
-    justify-content: center;
-    align-items: center;
+    margin: auto;
     background-color: #02020C;
-    width: 30rem;
+    width: 40rem;
+    border-radius: 0.5rem;
+    border: 1px solid #7A7493;
 }
-.m_barra_pesq input{
+#m_pesquisa{
     height: 2rem;
-    width: ;
+    width: 40rem;
+    background-color: #02020C;
+    border: none;
+    margin: 0.1rem;
+    color: var(--branco);
+}
+#m_pesquisa:focus{
+    outline: none;
+    border: none;
 }
 .m_barra_pesq img{
     width: 2rem;
+    margin: 0.2rem;
 }
-
-
+.m_barra_pesq button{
+    background-color: #2E798D;
+    border: none;
+    border-top-right-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    font-family: var(--mont);
+    font-weight: bolder;
+    cursor: pointer;
+}
+.m_barra_pesq button:hover{
+    background-color: #14CDFF;
+    color: var(--branco);
+}
 
 /* cores do tipos */
 .m_poke_tipo .m_normal, .m_poke_cards .m_normal {
