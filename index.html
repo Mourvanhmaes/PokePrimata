@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokeprimata</title>
+    <link rel="shortcut icon" href="img/logo_pokebola.svg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <div class="m_header_home">
+            <a href="index.html">
+                <img src="img/logo_pokebola.svg" alt="logo">
+                <h1>POKEPRIMATA</h1>
+            </a>
+        </div>
+        <nav class="m_header_nav">
+            <a href="index.html" class="m_header_a m_header_marcado">Inicio</a>
+            <a href="#" class="m_header_a">Times</a>
+            <a href="pokemon.html" class="m_header_a">Pokémon</a>
+            <a href="#" class="m_header_a">Favoritos</a>
+            <a href="#" class="m_header_a">Jogos</a>
+        </nav>
+        <div class="m_header_direito">
+            <a href="#"><img src="img/lupa.svg" alt="lupa" class="m_header_lupa"></a>
+            <a href="#" class="m_header_botao_login">LOGIN</a>
+            <a href="#"><img src="img/menu.svg" alt="menu" class="m_header_menu"></a>
+        </div>
+    </header>
+    <main>
+        <div class="m_index">
+            <div class="m_filtros">
+                <select name="tipos" id="tipos">
+                    <option value="nada">— Selecione —</option>
+                    <option value="normal">Normal</option>
+                    <option value="fire">Fogo</option>
+                    <option value="water">Água</option>
+                    <option value="electric">Elétrico</option>
+                    <option value="grass">Grama</option>
+                    <option value="ice">Gelo</option>
+                    <option value="fighting">Lutador</option>
+                    <option value="poison">Veneno</option>
+                    <option value="ground">Terra</option>
+                    <option value="flying">Voador</option>
+                    <option value="psychic">Psíquico</option>
+                    <option value="bug">Inseto</option>
+                    <option value="rock">Pedra</option>
+                    <option value="ghost">Fantasma</option>
+                    <option value="dragon">Dragão</option>
+                    <option value="dark">Noturno</option>
+                    <option value="steel">Aço</option>
+                    <option value="fairy">Fada</option>
+                </select>
+                <button onclick="m_filtrar()">Filtrar</button>
+            </div>
+            <div class="m_cards">
+                <!-- <div class="m_card">
+                    <div class="m_card_id">
+                        <h5>#1</h5>
+                    </div>
+                    <div class="m_card_info">
+                        <img src="img/charizard.svg" alt="cha">
+                        <h3>Charizard</h3>
+                        <div class="m_poke_tipo">
+                            <h4>fire</h4>
+                            <h4>flying</h4>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <div class="m_num_pag">
+                <img src="img/caret-left.svg" alt="seta esquerda" onclick="m_up_pag(0)">
+                <h3><span id="m_pag_num">1</span> de 41</h3>
+                <img src="img/caret-right.svg" alt="seta direita" onclick="m_up_pag(1)">
+            </div>
+        </div>
+    </main>
+</body>
+<script src="script.js"></script>
+</html>
