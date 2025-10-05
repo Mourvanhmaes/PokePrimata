@@ -497,6 +497,9 @@ header{
     align-items: center;
     color: var(--branco);
     font-family: var(--jersey);
+    padding-bottom: 10rem;
+    padding-top: 2rem;
+    gap: 2rem;
 }
 .m_jogo h1{
     font-size: 400%;
@@ -554,6 +557,7 @@ header{
 .m_jogo_poke img {
     filter: brightness(0);
     width: 20rem;
+    transition: 2s;
 }
 .m_jogo_op{
     display: flex;
@@ -598,7 +602,7 @@ header{
         #017595 100%
     );
     background-size: 200% 200%;
-    animation: brilhoBotao 2s linear infinite;
+    animation: brilhar 2s linear infinite;
     border: none;
     width: 15rem;
     font-family: var(--jersey);
@@ -612,7 +616,7 @@ header{
     transform: scale(1.2);
 }
 
-@keyframes brilhoBotao {
+@keyframes brilhar {
     0% {
         background-position: -100% 0;
     }

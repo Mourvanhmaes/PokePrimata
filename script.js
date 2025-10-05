@@ -227,6 +227,32 @@ function m_up_pag(n){
     }
     document.getElementById("m_pag_num").innerHTML = m_pagina;
 }
+function m_up_pag_filtros(n){
+    let pokemon = document.querySelector(".m_cards");
+    pokemon.innerHTML = " ";
+    if(n == 0){
+        if(m_pagina <= 1){
+            m_pagina = 41;
+            m_filtrar(m_calculo_pag());
+        }
+        else{
+            m_pagina--;
+            m_filtrar(m_calculo_pag());
+        }
+    }
+    else if(n == 1){
+        if(m_pagina >= 41){
+            m_pagina = 1;
+            m_filtrar(m_calculo_pag());
+        }
+        else{
+            m_pagina++;
+            m_filtrar(m_calculo_pag());
+        }
+    }
+    document.getElementById("m_pag_num").innerHTML = m_pagina;
+}
+
 async function m_busca_evo(nome){
     let poke = document.querySelector(".m_poke_evo");
     m_aux_evo++;
@@ -287,6 +313,7 @@ async function m_jogo_poke(){
         </div>
         `;
     let op = document.querySelector(".m_jogo_op");
+    let aux_certo = 0;
     let certo = Math.floor(Math.random() * 4);;
     for(let i = 0; i < 4; i++){
         let busca_2 = m_gerador(busca_1, 1025 );
@@ -295,14 +322,16 @@ async function m_jogo_poke(){
         let nome = null;
         if(certo == i){
             nome = dados_1.name;
+            aux_certo = 1;
         }
         else{
             nome = dados_2.name;
+            aux_certo = 0;
         }
         switch(i){
             case 0:
                 op.innerHTML += `
-                    <div class="m_op" onclick="m_busca_id()">
+                    <div class="m_op" onclick="m_opcao(${aux_certo})">
                         <h2>A</h2>
                         <h3>${nome}</h3>
                     </div>
@@ -310,7 +339,7 @@ async function m_jogo_poke(){
                 break;
             case 1:
                 op.innerHTML += `
-                    <div class="m_op" onclick="m_busca_id()">
+                    <div class="m_op" onclick="m_opcao(${aux_certo})">
                         <h2>B</h2>
                         <h3>${nome}</h3>
                     </div>
@@ -318,7 +347,7 @@ async function m_jogo_poke(){
                 break;
             case 2:
                 op.innerHTML += `
-                    <div class="m_op" onclick="m_busca_id()">
+                    <div class="m_op" onclick="m_opcao(${aux_certo})">
                         <h2>C</h2>
                         <h3>${nome}</h3>
                     </div>
@@ -326,7 +355,7 @@ async function m_jogo_poke(){
                 break;
             case 3:
                 op.innerHTML += `
-                    <div class="m_op" onclick="m_busca_id()">
+                    <div class="m_op" onclick="m_opcao(${aux_certo})">
                         <h2>D</h2>
                         <h3>${nome}</h3>
                     </div>
@@ -335,8 +364,68 @@ async function m_jogo_poke(){
         };    
     }
 }
+function m_opcao(resp){
+    if(resp == 1){
+        alert("acertou");
+    }
+    else{
+        alert("Errou");
+    }
+}
+function m_dica(){
+    let pokemon = document.querySelector(".m_jogo_poke img");
+    pokemon.style.filter = "brightness(1)";
+    document.getElementById("m_dica").innerHTML++;  
+}
+function m_aplicar_filtrar(){
+    m_pagina = 1;
+    m_filtrar(m_calculo_pag());
+}
+async function m_filtrar(n){
+    let pokemon = document.querySelector(".m_cards");
+    pokemon.innerHTML = " ";
+    let tipo = document.getElementById("tipos").value;
+    if(tipo == "nada"){
+        window.location.reload();
+    }
+    let resposta = await fetch(`https://pokeapi.co/api/v2/type/${tipo}`);
+    let dados1 = await resposta.json();
+    if((n - 25) <= 0){
+        incial = 0;
+    }
+    else{
+        incial = n - 24;
+    }
+    
+    for(let i = incial; i <= n - 1; i++){
+        let poke_tipo = dados1.pokemon[i].pokemon.name;
+        let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${poke_tipo}`);
+        let dados = await resposta.json();
+        let img = dados.sprites.other['official-artwork'].front_default;
+        let tipos = dados.types.map(t => t.type.name);
+        pokemon.innerHTML += `
+            <div class="m_card" onclick="m_enviar_dados(${dados.id})">
+                <div class="m_card_id">
+                    <h5>#${String(dados.id).padStart(3, "0")}</h5>
+                </div>
+                <div class="m_card_info">
+                    <img src="${img}" alt="${dados.name}">
+                    <h3>${dados.name}</h3>
+                    <div class="m_poke_tipo">
+                        ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    let pag = document.querySelector(".m_num_pag");
+    pag.innerHTML = `
+        <img src="img/caret-left.svg" alt="seta esquerda" onclick="m_up_pag_filtros(0)">
+        <h3><span id="m_pag_num">1</span> de 41</h3>
+        <img src="img/caret-right.svg" alt="seta direita" onclick="m_up_pag_filtros(1)">
+    `;
 
-
+}
 
 
 m_jogo_poke();
