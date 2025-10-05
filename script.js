@@ -266,10 +266,79 @@ async function  m_pesquisa(){
     let dados = await resposta.json();
     m_busca_pokemon(dados.id);
 }
+function m_gerador(n, q){
+    let numero;
+    do {
+        numero = Math.floor(Math.random() * q) + 1;
+    } while (numero === n);
+    return numero;
+}
+async function m_jogo_poke(){
+    let pokemon = document.querySelector(".m_jogo_principal");
+    let busca_1 = m_gerador(0, 1025);
+    let resposta_1 = await fetch(`https://pokeapi.co/api/v2/pokemon/${busca_1}`);
+    let dados_1 = await resposta_1.json();
+    let img = dados_1.sprites.other['official-artwork'].front_default;
+    pokemon.innerHTML = `
+        <div class="m_jogo_poke">
+            <img src="${img}" alt="${dados_1.name}">
+        </div>
+        <div class="m_jogo_op">                 
+        </div>
+        `;
+    let op = document.querySelector(".m_jogo_op");
+    let certo = Math.floor(Math.random() * 4);;
+    for(let i = 0; i < 4; i++){
+        let busca_2 = m_gerador(busca_1, 1025 );
+        let resposta_2 = await fetch(`https://pokeapi.co/api/v2/pokemon/${busca_2}`);
+        let dados_2 = await resposta_2.json();
+        let nome = null;
+        if(certo == i){
+            nome = dados_1.name;
+        }
+        else{
+            nome = dados_2.name;
+        }
+        switch(i){
+            case 0:
+                op.innerHTML += `
+                    <div class="m_op" onclick="m_busca_id()">
+                        <h2>A</h2>
+                        <h3>${nome}</h3>
+                    </div>
+                `;
+                break;
+            case 1:
+                op.innerHTML += `
+                    <div class="m_op" onclick="m_busca_id()">
+                        <h2>B</h2>
+                        <h3>${nome}</h3>
+                    </div>
+                `;
+                break;
+            case 2:
+                op.innerHTML += `
+                    <div class="m_op" onclick="m_busca_id()">
+                        <h2>C</h2>
+                        <h3>${nome}</h3>
+                    </div>
+                `;
+                break;
+            case 3:
+                op.innerHTML += `
+                    <div class="m_op" onclick="m_busca_id()">
+                        <h2>D</h2>
+                        <h3>${nome}</h3>
+                    </div>
+                `;
+                break;
+        };    
+    }
+}
+
+
+
+
+m_jogo_poke();
 m_index_poke(m_calculo_pag());
 m_busca_id();
-document.getElementById("m_pesquisa").addEventListener("keydown", function(m_enter) {
-    if (m_enter.key === "Enter") {
-        m_pesquisa();
-    }
-});
