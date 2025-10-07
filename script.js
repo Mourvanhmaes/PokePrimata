@@ -2,6 +2,8 @@ let m_poke_id = 0;
 let m_pagina = 1;
 let m_evo = [];
 let m_aux_evo = 0;
+let m_dica_aux = 0;
+let m_jogo_id = 0;
 async function m_busca_pokemon(n){
     m_poke_id = n;
     let antes = n - 1;
@@ -301,15 +303,23 @@ function m_gerador(n, q){
 }
 async function m_jogo_poke(){
     let pokemon = document.querySelector(".m_jogo_principal");
+    let dica_tipo = document.querySelector(".m_dica_tipo");
     let busca_1 = m_gerador(0, 1025);
     let resposta_1 = await fetch(`https://pokeapi.co/api/v2/pokemon/${busca_1}`);
     let dados_1 = await resposta_1.json();
     let img = dados_1.sprites.other['official-artwork'].front_default;
+    let tipos = dados_1.types.map(t => t.type.name);
+    m_jogo_id = dados_1.id;
     pokemon.innerHTML = `
         <div class="m_jogo_poke">
             <img src="${img}" alt="${dados_1.name}">
         </div>
         <div class="m_jogo_op">                 
+        </div>
+        `;
+    dica_tipo.innerHTML = `
+        <div class="m_poke_tipo">
+            ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
         </div>
         `;
     let op = document.querySelector(".m_jogo_op");
@@ -367,15 +377,38 @@ async function m_jogo_poke(){
 function m_opcao(resp){
     if(resp == 1){
         alert("acertou");
+        document.getElementById("m_trofeu").innerHTML++;
+        m_jogo_poke();
     }
     else{
         alert("Errou");
+        document.getElementById("m_erros").innerHTML++;
     }
 }
 function m_dica(){
     let pokemon = document.querySelector(".m_jogo_poke img");
-    pokemon.style.filter = "brightness(1)";
-    document.getElementById("m_dica").innerHTML++;  
+    let tipo = document.querySelectorAll(".m_dica_tipo .m_poke_tipo h4");
+    if(m_dica_aux == 0){
+        pokemon.style.filter = "brightness(1)";
+        document.getElementById("m_dica").innerHTML = 1; 
+        m_dica_aux = 1;
+        return;
+    }
+    if(m_dica_aux == 1){
+        tipo[0].style.filter = "brightness(1)";
+        if(tipo.length > 0){
+            tipo[1].style.filter = "brightness(1)";
+        }
+        document.getElementById("m_dica").innerHTML = 2;
+        m_dica_aux = 2;
+        return;
+    }
+    if(m_dica_aux == 2){
+        document.getElementById("m_dica").innerHTML = 3;
+        m_dica_aux = 0;
+        m_enviar_dados(m_jogo_id);
+        window.location.href = "pokemon.html";
+    }
 }
 function m_aplicar_filtrar(){
     m_pagina = 1;

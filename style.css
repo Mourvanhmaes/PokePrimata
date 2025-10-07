@@ -544,7 +544,6 @@ header{
     justify-content: center;
     gap: 10rem;
     padding-top: 3rem;
-    padding-bottom: 3rem;
 }
 .m_jogo_poke{
     padding: 1rem;
@@ -623,6 +622,12 @@ header{
     100% {
         background-position: 100% 0;
     }
+}
+.m_dica_tipo .m_poke_tipo h4{
+    width: 10rem;
+    text-align: center;
+    font-size: 180%;
+    filter: brightness(99);
 }
 /* cores do tipos */
 .m_poke_tipo .m_normal, .m_poke_cards .m_normal {
