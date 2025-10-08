@@ -112,3 +112,28 @@ codigo pokemon original
         </div>
 
 -----------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+codigo evolução com id
+    poke.innerHTML = `
+    <div class="m_poke_evo_titulo">
+        <h1>Evoluções Registradas</h1>
+        <br>
+        <p>Da sua forma inicial até seu auge, cada evolução conta uma nova história</p>
+    </div>
+    <div class="m_poke_evo_quadrado">
+        ${m_evo.map((evo, index) => `
+            <div class="m_poke_evo_card">
+                <img src="${evo.img}" alt="${evo.nome}">
+                <div class="m_poke_evo_card_nome">
+                    <h5>${evo.nome} #${String(evo.id).padStart(3,"0")}</h5>
+                    <div class="m_poke_tipo">
+                        ${evo.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join("")}
+                    </div>
+                </div>
+            </div>
+            ${index < m_evo.length - 1 ? `<img src="img/evolu.svg" alt="evolucao">` : ""}
+        `).join("")}
+    </div>`;    

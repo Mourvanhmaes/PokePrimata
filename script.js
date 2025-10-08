@@ -87,8 +87,8 @@ async function m_busca_pokemon(n){
                 <div class="m_poke_seq_titulo">
                     <h1>Sequencia</h1>
                     <div class="m_poke_extras_setas">
-                        <img src="img/caret-left.svg" alt="esquerda">
-                        <img src="img/caret-right.svg" alt="direita">
+                        <img src="img/caret-left.svg" alt="esquerda" onclick="m_poke_antes()">
+                        <img src="img/caret-right.svg" alt="direita" onclick="m_poke_prox()">
                     </div>
                 </div>
                 <div class="m_poke_cards">
@@ -275,10 +275,10 @@ async function m_busca_evo(nome){
     </div>
     <div class="m_poke_evo_quadrado">
         ${m_evo.map((evo, index) => `
-            <div class="m_poke_evo_card">
+            <div class="m_poke_evo_card" onclick="m_busca_pokemon(${evo.id})">
                 <img src="${evo.img}" alt="${evo.nome}">
                 <div class="m_poke_evo_card_nome">
-                    <h5>${evo.nome} #${String(evo.id).padStart(3,"0")}</h5>
+                    <h5>${evo.nome}</h5>
                     <div class="m_poke_tipo">
                         ${evo.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join("")}
                     </div>
@@ -304,7 +304,7 @@ function m_gerador(n, q){
 async function m_jogo_poke(){
     let pokemon = document.querySelector(".m_jogo_principal");
     let dica_tipo = document.querySelector(".m_dica_tipo");
-    let busca_1 = m_gerador(0, 1025);
+    let busca_1 = m_gerador(0, 999);
     let resposta_1 = await fetch(`https://pokeapi.co/api/v2/pokemon/${busca_1}`);
     let dados_1 = await resposta_1.json();
     let img = dados_1.sprites.other['official-artwork'].front_default;
@@ -378,6 +378,8 @@ function m_opcao(resp){
     if(resp == 1){
         alert("acertou");
         document.getElementById("m_trofeu").innerHTML++;
+        m_dica_aux = 0;
+        document.getElementById("m_dica").innerHTML = 0; 
         m_jogo_poke();
     }
     else{
@@ -395,12 +397,12 @@ function m_dica(){
         return;
     }
     if(m_dica_aux == 1){
+        m_dica_aux = 2; 
+        document.getElementById("m_dica").innerHTML = 2;
         tipo[0].style.filter = "brightness(1)";
         if(tipo.length > 0){
             tipo[1].style.filter = "brightness(1)";
         }
-        document.getElementById("m_dica").innerHTML = 2;
-        m_dica_aux = 2;
         return;
     }
     if(m_dica_aux == 2){
@@ -408,6 +410,7 @@ function m_dica(){
         m_dica_aux = 0;
         m_enviar_dados(m_jogo_id);
         window.location.href = "pokemon.html";
+        return;
     }
 }
 function m_aplicar_filtrar(){
@@ -416,6 +419,7 @@ function m_aplicar_filtrar(){
 }
 async function m_filtrar(n){
     let pokemon = document.querySelector(".m_cards");
+    let aux_pag = 0;
     pokemon.innerHTML = " ";
     let tipo = document.getElementById("tipos").value;
     if(tipo == "nada"){
@@ -425,12 +429,14 @@ async function m_filtrar(n){
     let dados1 = await resposta.json();
     if((n - 25) <= 0){
         incial = 0;
+        aux_pag = 1;
     }
     else{
         incial = n - 24;
+        aux_pag = 0;
     }
     
-    for(let i = incial; i <= n - 1; i++){
+    for(let i = incial; i <= n - aux_pag; i++){
         let poke_tipo = dados1.pokemon[i].pokemon.name;
         let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${poke_tipo}`);
         let dados = await resposta.json();
@@ -454,7 +460,7 @@ async function m_filtrar(n){
     let pag = document.querySelector(".m_num_pag");
     pag.innerHTML = `
         <img src="img/caret-left.svg" alt="seta esquerda" onclick="m_up_pag_filtros(0)">
-        <h3><span id="m_pag_num">1</span> de 41</h3>
+        <h3><span id="m_pag_num">${m_pagina}</span> de 41</h3>
         <img src="img/caret-right.svg" alt="seta direita" onclick="m_up_pag_filtros(1)">
     `;
 

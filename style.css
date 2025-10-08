@@ -71,15 +71,15 @@ header{
     color: var(--laranja_contraste);
     text-shadow:
         0 0 6px var(--laranja_contraste),
-        0 0 20px var(--laranja_contraste),
-        0 0 40px var(--laranja_contraste);
+        0 0 10px var(--laranja_contraste),
+        0 0 20px var(--laranja_contraste);
 }
 .m_header_marcado{
     color: var(--azul-botao);
     text-shadow:
         0 0 6px var(--azul-botao),
-        0 0 20px var(--azul-botao),
-        0 0 40px var(--azul-botao);
+        0 0 10px var(--azul-botao),
+        0 0 20px var(--azul-botao);
 }
 .m_header_marcado:hover{
     color: var(--azul-botao);
@@ -347,6 +347,7 @@ header{
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    cursor: pointer;
 }
 .m_poke_evo_card_nome{
     display: flex;
@@ -362,6 +363,7 @@ header{
 .m_poke_extras_setas img{
     filter: invert(100);
     width: 1.5rem;
+    cursor: pointer;
 }
 /* ---------------------------------index--------------------------- */
 .m_index{
@@ -542,8 +544,29 @@ header{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10rem;
-    padding-top: 3rem;
+    gap: 15rem;
+    z-index: 2;
+}
+.m_jogo_todos{
+    background-color: #162431;
+    border: 3px solid #00B9F1;
+    border-radius: 1rem;
+    padding: 1rem 3rem 1rem 3rem;
+    box-shadow: 1px 1px 3px var(--azul-botao), 0 0 5px var(--azul-botao);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.m_img_fundo{
+    position: absolute;
+    top: 48%;
+    left: 35%;
+    z-index: 0;
+}
+.m_img_fundo img{
+    width: 30rem;
+    opacity: 2%;
 }
 .m_jogo_poke{
     padding: 1rem;
@@ -613,6 +636,12 @@ header{
 }
 .m_jogo_dica button:hover{
     transform: scale(1.2);
+}
+.m_dica_tipo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
 }
 
 @keyframes brilhar {
