@@ -20,6 +20,7 @@ async function m_busca_pokemon(n){
     let img = dados.sprites.other['official-artwork'].front_default;
     let tipos = dados.types.map(t => t.type.name);
     let habilidades = dados.abilities.map(h => h.ability.name);
+    let fraquezas = [];
     // pegar o anterior e o proximo
     let resp_ante = await fetch(`https://pokeapi.co/api/v2/pokemon/${antes}`);
     let resp_prox = await fetch(`https://pokeapi.co/api/v2/pokemon/${prox}`);
@@ -33,6 +34,27 @@ async function m_busca_pokemon(n){
     let resdes = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${n}`);
     let dados_esp = await resdes.json();
     let descricao = dados_esp.flavor_text_entries[0].flavor_text;
+    switch(tipos[0]) {
+        case "normal": fraquezas.push("fighting"); break;
+        case "fire": fraquezas.push("water", "ground", "rock"); break;
+        case "water": fraquezas.push("electric", "grass"); break;
+        case "electric": fraquezas.push("ground"); break;
+        case "grass": fraquezas.push("fire", "ice", "poison", "flying", "bug"); break;
+        case "ice": fraquezas.push("fire", "fighting", "rock", "steel"); break;
+        case "fighting": fraquezas.push("flying", "psychic", "fairy"); break;
+        case "poison": fraquezas.push("ground", "psychic"); break;
+        case "ground": fraquezas.push("water", "ice", "grass"); break;
+        case "flying": fraquezas.push("electric", "ice", "rock"); break;
+        case "psychic": fraquezas.push("bug", "ghost", "dark"); break;
+        case "bug": fraquezas.push("fire", "flying", "rock"); break;
+        case "rock": fraquezas.push("water", "grass", "fighting", "ground", "steel"); break;
+        case "ghost": fraquezas.push("ghost", "dark"); break;
+        case "dragon": fraquezas.push("ice", "dragon", "fairy"); break;
+        case "dark": fraquezas.push("fighting", "bug", "fairy"); break;
+        case "steel": fraquezas.push("fire", "fighting", "ground"); break;
+        case "fairy": fraquezas.push("poison", "steel"); break;
+        default: break;
+    }
     pokemon.innerHTML = `
         <div class="m_barra_pesq">
             <img src="img/lupa.svg" alt="lupa">
@@ -66,9 +88,7 @@ async function m_busca_pokemon(n){
                     <div class="m_poke_fraq">
                         <h3>Franquezas</h3>
                         <div class="m_poke_tipo">
-                            <h4>fire</h4>
-                            <h4>flying</h4>
-                            <h4>flying</h4>
+                            ${fraquezas.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
                         </div>
                     </div>
                 </div>
@@ -406,11 +426,32 @@ function m_dica(){
         return;
     }
     if(m_dica_aux == 2){
-        document.getElementById("m_dica").innerHTML = 3;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        m_alert_dica3();
+        return;
+    }
+}
+function m_alert_dica3(){
+    let alerta = document.querySelector(".m_jogo_alert");
+    alerta.style.display = "flex";
+    let jogo = document.querySelector(".m_jogo");
+    jogo.style.transition = "filter 0.5s";
+    jogo.style.filter = "blur(10px)";
+    jogo.style.pointerEvents = "none";
+}
+function m_dica_op(n){
+    if(n == 0){
+        let alerta = document.querySelector(".m_jogo_alert");
+        alerta.style.display = "none";
+        let jogo = document.querySelector(".m_jogo");
+        jogo.style.transition = "none";
+        jogo.style.filter = "blur(0)";
+        jogo.style.pointerEvents = "auto";
+    }
+    else if(n == 1){
         m_dica_aux = 0;
         m_enviar_dados(m_jogo_id);
         window.location.href = "pokemon.html";
-        return;
     }
 }
 function m_aplicar_filtrar(){

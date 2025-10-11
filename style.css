@@ -524,7 +524,7 @@ header{
     width: 5rem;
 }
 .m_jogo_card img{
-    width: 3rem;
+    width: 5rem;
 }
 .m_acerto{
     background-color: var(--grass);
@@ -560,7 +560,7 @@ header{
 }
 .m_img_fundo{
     position: absolute;
-    top: 35%;
+    top: 45%;
     left: 35%;
     z-index: 0;
 }
@@ -657,6 +657,62 @@ header{
     text-align: center;
     font-size: 180%;
     filter: brightness(99);
+}
+/*------------------------------------alert------------------------- */
+.m_jogo_alert{
+    position: absolute;
+    background-color: var(--fundo_poke);
+    color: var(--branco);
+    font-family: var(--mont);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 30rem;
+    text-align: center;
+    border: 2px solid var(--azul-botao);
+    border-radius: 2rem;
+    padding: 1rem;
+    top: 10%;
+    left: 33%;
+    z-index: 999;
+    display: none;
+}
+.m_jogo_alert img{
+    width: 8rem;
+}
+.m_alert_button{
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+}
+.m_alert_button_con{
+    border: 1px solid var(--grass);
+    color: var(--grass);
+    background-color: var(--fundo_poke);
+    font-family: var(--mont);
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    font-size: 120%;
+    width: 10rem;
+    cursor: pointer;
+}
+.m_alert_button_con:hover{
+    background-color: #79c74c32;
+}
+.m_alert_button_can{
+    border: 1px solid var(--fighting);
+    color: var(--fighting);
+    background-color: var(--fundo_poke);
+    font-family: var(--mont);
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    font-size: 120%;
+    width: 10rem;
+    cursor: pointer;
+}
+.m_alert_button_can:hover{
+    background-color:   #c22d2836;
 }
 /* cores do tipos */
 .m_poke_tipo .m_normal, .m_poke_cards .m_normal {
