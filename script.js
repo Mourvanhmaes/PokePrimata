@@ -203,6 +203,11 @@ async function m_index_poke(n){
             </div>
         `;
     }
+    document.getElementById("m_pesquisa_poke").addEventListener("keydown", function(m_enter2) {
+    if (m_enter2.key === "Enter") {
+        m_pesquisa_poke();
+    }
+    });
 }
 function m_enviar_dados(id){
     let dados = JSON.stringify(id);
@@ -427,11 +432,11 @@ function m_dica(){
     }
     if(m_dica_aux == 2){
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        m_alert_dica3();
+        m_alert_dica();
         return;
     }
 }
-function m_alert_dica3(){
+function m_alert_dica(){
     let alerta = document.querySelector(".m_jogo_alert");
     alerta.style.display = "flex";
     let jogo = document.querySelector(".m_jogo");
@@ -506,8 +511,40 @@ async function m_filtrar(n){
     `;
 
 }
-
-
-m_jogo_poke();
+function m_tocar_quem(){
+    let musica = new Audio('audio/quem_poke.mp3');
+    musica.play();
+}
+async function m_pesquisa_poke(){
+    let m_pesq = document.getElementById("m_pesquisa_poke").value;
+    if(m_pesq == ""){
+        m_index_poke(m_calculo_pag());
+    }
+    let pokemon = document.querySelector(".m_cards");
+    pokemon.innerHTML = "";
+    let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${m_pesq}`);
+    if(!resposta.ok){
+        pokemon.innerHTML = "Nenhum Pokemon encontrado tente novamente!!";
+        return;
+    }
+    let dados = await resposta.json();
+    let img = dados.sprites.other['official-artwork'].front_default;
+    let tipos = dados.types.map(t => t.type.name);
+    pokemon.innerHTML += `
+       <div class="m_card" onclick="m_enviar_dados(${dados.id})">
+           <div class="m_card_id">
+               <h5>#${String(dados.id).padStart(3, "0")}</h5>
+           </div>
+           <div class="m_card_info">
+               <img src="${img}" alt="${dados.name}">
+               <h3>${dados.name}</h3>
+                <div class="m_poke_tipo">
+                    ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+m_jogo_poke();  
 m_index_poke(m_calculo_pag());
 m_busca_id();

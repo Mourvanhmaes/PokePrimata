@@ -30,6 +30,14 @@
     </header>
     <main>
         <div class="m_index">
+            <br>
+            <div class="m_barra_pesq">
+                <img src="img/lupa.svg" alt="lupa">
+                <input type="text" placeholder="Buscar Pokémon por nome, numero...." id="m_pesquisa_poke">
+                <button onclick="m_pesquisa_poke()">Buscar</button>
+            </div>
+            <br>
+            <br>
             <div class="m_filtros">
                 <select name="tipos" id="tipos">
                     <option value="nada">— Selecione —</option>
@@ -55,19 +63,6 @@
                 <button onclick="m_aplicar_filtrar()">Filtrar</button>
             </div>
             <div class="m_cards">
-                <!-- <div class="m_card">
-                    <div class="m_card_id">
-                        <h5>#1</h5>
-                    </div>
-                    <div class="m_card_info">
-                        <img src="img/charizard.svg" alt="cha">
-                        <h3>Charizard</h3>
-                        <div class="m_poke_tipo">
-                            <h4>fire</h4>
-                            <h4>flying</h4>
-                        </div>
-                    </div>
-                </div> -->
             </div>
             <div class="m_num_pag">
                 <img src="img/caret-left.svg" alt="seta esquerda" onclick="m_up_pag(0)">

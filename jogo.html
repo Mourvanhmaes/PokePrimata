@@ -39,7 +39,19 @@
     </div>
     <main>
         <div class="m_jogo">
-            <div class="m_jogo_pontos">
+            <div class="m_jogo_todos">
+                <h1 onclick="m_tocar_quem()">Quem é esse Pokemon?</h1>
+                <div class="m_jogo_principal">
+                </div>
+                <div class="m_dica_tipo">
+                    <div class="m_poke_tipo">
+                    </div>                
+                </div>
+            </div>
+            <div class="m_jogo_dica">
+                <button onclick="m_dica()">Dicas <span id="m_dica">0</span>/3</button>
+            </div>
+            <div class="m_jogo_pontos"> 
                 <div class="m_jogo_card">
                     <img src="img/trofeu.png" alt="trofeu">
                     <h2 id="m_trofeu">0</h2>
@@ -51,25 +63,10 @@
                     <h2 id="m_erros">0</h2>
                     <h4>Erros</h4>
                     <p class="m_erro"></p>
-                </div> 
-            </div>
-            <div class="m_jogo_todos">
-                <h1>Quem é esse Pokemon?</h1>
-                <div class="m_img_fundo">
-                    <img src="img/logo_pokebola.svg" alt="logo pokebola">
-                </div>
-                <div class="m_jogo_principal">
-                </div>
-                <div class="m_dica_tipo">
-                    <div class="m_poke_tipo">
-                    </div>                
-                </div>
-            </div>
-            <div class="m_jogo_dica">
-                <button onclick="m_dica()">Dicas <span id="m_dica">0</span>/3</button>
             </div>
         </div>
     </main>
 </body>
-<script src="script.js"></script>
+<script src="script.js">
+</script>
 </html>

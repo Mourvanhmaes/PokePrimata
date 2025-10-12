@@ -368,6 +368,9 @@ header{
 /* ---------------------------------index--------------------------- */
 .m_index{
     background-color: #0A0A11;
+    min-height: 100vh;
+    color: var(--branco);
+    font-family: var(--mont);
 }
 .m_cards{
     display: flex;
@@ -473,6 +476,18 @@ header{
     outline: none;
     border: none;
 }
+#m_pesquisa_poke{
+    height: 2rem;
+    width: 40rem;
+    background-color: #02020C;
+    border: none;
+    margin: 0.1rem;
+    color: var(--branco);
+}
+#m_pesquisa_poke:focus{
+    outline: none;
+    border: none;
+}
 .m_barra_pesq img{
     width: 2rem;
     margin: 0.2rem;
@@ -557,16 +572,6 @@ header{
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-}
-.m_img_fundo{
-    position: absolute;
-    top: 45%;
-    left: 35%;
-    z-index: 0;
-}
-.m_img_fundo img{
-    width: 30rem;
-    opacity: 2%;
 }
 .m_jogo_poke{
     padding: 1rem;
