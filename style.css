@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap'); /*font-family: "Jersey 20", sans-serif;  */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');  /* font-family: "Montserrat", sans-serif; */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap'); /* font-family: "Roboto", sans-serif; */
-
+@import url('https://fonts.googleapis.com/css2?family=Anaheim:wght@400..800&display=swap'); /*anaheim*/
 *{
     margin: 0;
 }
@@ -16,6 +16,7 @@
     /* fonts */
     --mont: "Montserrat", sans-serif;
     --jersey: "Jersey 20", sans-serif;
+    --anaheim: "Anaheim", sans-serif;
     /* cores do tipo */
     --normal: #A8A77A;
     --fire: #EE8130;
@@ -718,6 +719,55 @@ header{
 }
 .m_alert_button_can:hover{
     background-color:   #c22d2836;
+}
+/* ------------------------------footer--------------------------- */
+footer{
+    background-color: var(--preto);
+}
+.m_f_principal{
+    padding: 1rem;
+    border-top: 6px double #505050;
+    padding-left: 7rem;
+}
+.m_f_titulo{
+    color: #7A8082;
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 1rem;
+}
+.m_f_logo{
+    color: var(--branco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+}
+.m_f_titulo h3{
+    font-family: var(--anaheim);
+    font-size: 160%;
+}
+.m_f_conts{
+    display: flex;
+    gap: 1rem;
+}
+.m_f_conts a{
+    background-color: var(--azul-botao);
+    padding: 0.5rem;
+    border-radius: 100%;
+}
+.m_f_conts a img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.4rem;
+}
+.m_f_segundario{
+    border-top: 6px double #505050;
+    padding: 1rem;
+    padding-left: 7rem;
+    color: #505050;
+    font-family: var(--anaheim);
 }
 /* cores do tipos */
 .m_poke_tipo .m_normal, .m_poke_cards .m_normal {
