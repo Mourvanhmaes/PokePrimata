@@ -524,7 +524,7 @@ header{
 }
 .m_jogo_pontos{
     display: flex;
-    gap: 1rem;
+    gap: 2rem;
 }
 .m_jogo_card{
     display: flex;
@@ -619,6 +619,11 @@ header{
     padding: 0.4rem;
     width: 1rem;
     height: 1rem;
+}
+.m_jogo_dica{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .m_jogo_dica button {
     background: linear-gradient(
