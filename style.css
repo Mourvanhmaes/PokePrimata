@@ -6,7 +6,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap'); /* font-family: "Comfortaa";*/
 *{
     margin: 0;
-    overflow-x: hidden;
 }
 :root{
     --branco: white;
@@ -71,6 +70,7 @@ header{
     font-family: var(--jersey);
     text-decoration-thickness: 0.5px;
     text-underline-offset: 3px;
+    font-size: 110%;
 }
 .m_header_a:hover{
     color: var(--laranja_contraste);
@@ -347,6 +347,9 @@ header{
     border: 2px solid var(--branco);
     border-radius: 100%;
     padding: 0.5rem;
+}
+#m_evo_baixo{
+    display: none;
 }
 .m_poke_evo_card{
     display: flex;
@@ -961,6 +964,9 @@ footer{
 /*-------------------------------responsivo------------------------------------ */
 /*-------------------------------responsivo------------------------------------ */
 @media (max-width: 800px) {
+    *{
+    overflow-x: hidden;
+    }
     .m_header_nav{
         display: none;
     }
@@ -1025,11 +1031,13 @@ footer{
         align-items: center;
     }
     .m_poke_pokemon_img img{
-        width: 15rem;
+        width: 20rem;
     }
     .m_poke_nome{
         flex-wrap: wrap;
         justify-content: center;
+        align-items: center;
+        flex-direction: column;
         font-size: 80%;
     }
     .m_poke_fraq .m_poke_tipo{
@@ -1051,6 +1059,64 @@ footer{
     .m_poke_card{
         font-size: 80%;
     }
+    .m_poke_evo_titulo{
+        text-align: center;
+    }
+    .m_poke_evo_quadrado{
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        width: 90%;
+        margin: auto;
+    }
+    .m_poke_evo_card img{
+        width: 10rem;
+    }
+    #m_evo_baixo{
+        display: block;
+        width: 5rem;
+    }
+    #m_evo_seta{
+        display: none;
+    }
+    .m_poke_setas{
+        display: none;
+    }
+    .m_poke_habilit{
+        display: none;
+    }
+    .m_pag_poke{
+        padding: 0.5rem;
+        padding-top: 1rem;
+    }
+    .m_poke_dados{
+        text-align: center;
+        padding-top: 0;
+    }
+    .m_poke_dados p{
+        font-size: 110%;
+        width: 100%;
+    }
+    /* jogo */
+    .m_jogo_principal{
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    .m_jogo{
+        padding: 2rem;
+    }
+    .m_jogo_todos{
+        padding: 0.5rem;
+    }
+    .m_jogo_poke{
+        box-shadow: none;
+    }
+    .m_jogo_pontos{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 }
 
 /* ==========menu lateral========= */
@@ -1068,6 +1134,10 @@ footer{
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    z-index: 999;
+}
+.a_body .m_menu_lateral{
+    background-color: rgba(255, 255, 255, 0.141);
 }
 .m_menu_lateral h1{
     font-family: var(--jersey);

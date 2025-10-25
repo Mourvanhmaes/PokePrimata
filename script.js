@@ -310,7 +310,7 @@ async function m_busca_evo(nome){
                     </div>
                 </div>
             </div>
-            ${index < m_evo.length - 1 ? `<img src="img/evolu.svg" alt="evolucao">` : ""}
+            ${index < m_evo.length - 1 ? `<img src="img/evolu.svg" alt="evolucao" id="m_evo_seta"> <img src="img/evo_baixo.svg" alt="evolucao" id="m_evo_baixo">` : ""}
         `).join("")}
     </div>`;
 }
