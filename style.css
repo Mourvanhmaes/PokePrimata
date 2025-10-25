@@ -6,6 +6,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap'); /* font-family: "Comfortaa";*/
 *{
     margin: 0;
+    overflow-x: hidden;
 }
 :root{
     --branco: white;
@@ -46,6 +47,7 @@ header{
     justify-content: space-between;
     padding: 0.4rem;
     background-color: var(--teste);
+    flex-wrap: wrap;
 }
 .m_header_home a{
     display: flex;
@@ -143,6 +145,7 @@ header{
     background-color: #162431;
     font-family: var(--mont);
     gap: 2rem;
+    flex-wrap: wrap;
 }
 .m_poke_dados{
     display: flex;
@@ -306,6 +309,7 @@ header{
     color: var(--branco);
     padding: 0.3rem;
     cursor: pointer;
+    width: 9rem;
 }
 .m_poke_card_des{
     display: flex;
@@ -380,14 +384,14 @@ header{
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.5rem;
-    padding: 1rem 15rem 1rem 15rem;
+    padding: 1rem 10rem 1rem 10rem;
 }
 .m_card{
     cursor: pointer;
     background-color: #161B26;
     border: 2px solid #7A7493;
     border-radius: 1rem;
-    width: 10rem;
+    width: 13rem;
     color: var(--branco);
     display: flex;
     justify-content: center;
@@ -410,10 +414,10 @@ header{
     gap: 0.1rem;
 }
 .m_card img{
-    width: 6rem;
+    width: 8rem;
 }
 .m_card .m_poke_tipo h4{
-    font-size: 50%;
+    font-size: 70%;
 }
 .m_card_id{
     width: 9rem;
@@ -422,7 +426,7 @@ header{
 }
 /* filtros */
 .m_filtros{
-    margin-left: 20rem;
+    margin-left: 12rem;
 }
 .m_filtros button{
     background-color: #1F163D;
@@ -951,4 +955,149 @@ footer{
 
 .a_form form h1 {
     color: #ffffff;
+}
+
+/*-------------------------------responsivo------------------------------------ */
+/*-------------------------------responsivo------------------------------------ */
+/*-------------------------------responsivo------------------------------------ */
+@media (max-width: 800px) {
+    .m_header_nav{
+        display: none;
+    }
+    .m_barra_pesq{
+        width: 90%;
+    }
+    .m_filtros{
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 0.3rem;
+    }
+    .m_f_principal{
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding-left: 0;
+        font-size: 170%;
+        padding: 0.5rem;
+    }
+    .m_f_titulo{
+        align-items: center;
+    }
+    .m_f_logo img{
+        width: 5rem;
+    }
+    .m_f_nav_t{
+        padding: 0;
+    }
+    .m_f_segundario{
+        padding: 0.5rem;
+    }
+    .m_cards{
+        padding: 1rem;
+    }
+    .m_card{
+        width: 60%;
+    }
+    .m_card img{
+        width: 10rem;
+    }
+    .m_barra_pesq button{
+        width: 30%;
+    }
+    .a_main{
+        padding: 1rem;
+        padding-top: 5rem;
+        padding-bottom: 10rem;
+    }
+    .m_poke_pokemon{
+        justify-content: center;
+        text-align: center;
+    }
+    .m_poke_pokemon .m_poke_tipo{
+        justify-content: center;
+    }
+    .m_poke_pokemon_img{
+        display: flex;
+        justify-content: center;
+    }
+    .m_poke_medidas{
+        align-items: center;
+    }
+    .m_poke_pokemon_img img{
+        width: 15rem;
+    }
+    .m_poke_nome{
+        flex-wrap: wrap;
+        justify-content: center;
+        font-size: 80%;
+    }
+    .m_poke_fraq .m_poke_tipo{
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .m_poke_habilit{
+        overflow-x: hidden;
+    }
+    .m_poke_master{
+        display: none;
+    }
+    .m_poke_extras{
+        flex-wrap: wrap;
+    }
+    .m_poke_card img{
+        width: 6rem;
+    }
+    .m_poke_card{
+        font-size: 80%;
+    }
+}
+
+/* ==========menu lateral========= */
+.m_menu_lateral{
+    position: fixed;
+    background-color: var(--teste);
+    padding: 2rem;
+    right: -100%;
+    transition: 0.5s linear;
+    border-bottom-left-radius: 1rem;
+    border: 2px double var(--branco);
+    border-top: none;
+    border-right: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.m_menu_lateral h1{
+    font-family: var(--jersey);
+    color: var(--branco);
+    margin-top: -1.8rem;
+}
+.m_menu_lateral nav{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-family: var(--jersey);
+    font-size: 200%;
+}
+.m_lat_a{
+    text-decoration: none;
+    color: var(--branco);
+}
+.m_lat_nav{
+    display: flex;
+    justify-content: left;
+    align-items: center;
+}
+.m_lat_nav img{
+    filter: invert(100%);
+    width: 1.5rem;
+    margin-right: 0.5rem;
+}
+.m_lat_a:hover{
+    text-decoration: underline;
+}
+.m_menu_logo{
+    width: 5rem;
 }

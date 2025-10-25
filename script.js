@@ -4,6 +4,7 @@ let m_evo = [];
 let m_aux_evo = 0;
 let m_dica_aux = 0;
 let m_jogo_id = 0;
+let m_cont_menu = 0;
 async function m_busca_pokemon(n){
     m_poke_id = n;
     let antes = n - 1;
@@ -544,6 +545,17 @@ async function m_pesquisa_poke(){
             </div>
         </div>
     `;
+}
+function m_menu_lateral(){
+    let menu = document.querySelector(".m_menu_lateral");
+    if(m_cont_menu == 0){
+        menu.style.right = "0";
+        m_cont_menu = 1;
+    }
+    else{
+        menu.style.right = "-100%";
+        m_cont_menu = 0;
+    }
 }
 m_jogo_poke();  
 m_index_poke(m_calculo_pag());
