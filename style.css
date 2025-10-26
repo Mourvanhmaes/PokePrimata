@@ -200,7 +200,7 @@ header{
 }
 .m_poke_pokemon_img img{
     position: relative;
-    z-index: 999;
+    z-index: 900;
     width: 25rem;
 }
 .m_poke_medidas{
@@ -626,8 +626,7 @@ header{
     font-size: 110%;
     border-radius: 100%;
     padding: 0.4rem;
-    width: 1rem;
-    height: 1rem;
+    width: 1.5rem;
 }
 .m_jogo_dica{
     display: flex;
@@ -907,7 +906,6 @@ footer{
     padding: 1.2rem;
     background-color: rgba(209, 199, 199, 0.2);
     border-radius: 2.0rem;
-    height: 32rem;
     gap: 1.5rem;
     backdrop-filter: blur(5px);
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -1009,7 +1007,7 @@ footer{
         width: 10rem;
     }
     .m_barra_pesq button{
-        width: 30%;
+        width: 40%;
     }
     .a_main{
         padding: 1rem;
@@ -1117,6 +1115,14 @@ footer{
         justify-content: center;
         align-items: center;
     }
+    .m_jogo_alert{
+        width: 80%;
+        margin: 0;
+        left: 6.5%;
+    }
+    .m_alert_button{
+        width: 100%;
+    }
 }
 
 /* ==========menu lateral========= */
@@ -1127,7 +1133,7 @@ footer{
     right: -100%;
     transition: 0.5s linear;
     border-bottom-left-radius: 1rem;
-    border: 2px double var(--branco);
+    border: 1px solid var(--branco);
     border-top: none;
     border-right: none;
     display: flex;
