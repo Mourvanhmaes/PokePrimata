@@ -931,6 +931,7 @@ footer{
     font-size: 135%;
     color: #ffff;
     border-radius: 2rem;
+    cursor: pointer;
 }
 
 .a-Lembre a {
@@ -1176,4 +1177,15 @@ footer{
 }
 .m_menu_logo{
     width: 5rem;
+}
+.m_user{
+    color: var(--branco);
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    justify-content: center ;
+}
+.m_user img{
+    filter: invert(100);
+    width: 2rem;
 }

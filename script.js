@@ -557,6 +557,64 @@ function m_menu_lateral(){
         m_cont_menu = 0;
     }
 }
+window.addEventListener("scroll", function() {
+    let menu = document.querySelector(".m_menu_lateral");
+    if (m_cont_menu == 1) {
+        menu.style.right = "-100%";
+        m_cont_menu = 0;
+    }
+});
 m_jogo_poke();  
 m_index_poke(m_calculo_pag());
 m_busca_id();
+m_usuario();
+
+// -----login-----
+function m_login(){
+    let email = document.getElementById("m_l_email").value;
+    let senha = document.getElementById("m_l_senha").value;
+    let dados;
+    try{
+        dados = localStorage.getItem("cadastro");
+        dados = JSON.parse(dados);
+    }
+    catch(error){
+        alert("Erro ao buscar dados");
+    }
+    if(email == dados.email && senha == dados.senha){
+        alert("Login Bem sucedido!!!!");
+        window.location.replace("index.html");
+    }
+    else{
+        alert("Erro ao logar, ou não possui cadastro!!")
+    }
+}
+function m_cadastro(){
+    try{
+        let email = document.getElementById("m_c_email").value;
+        let nome = document.getElementById("m_c_nome").value;
+        let senha = document.getElementById("m_c_senha").value;
+        let senha2 = document.getElementById("m_c_senha2").value;
+        if(senha != senha2){
+            alert("As senhas não são iguais");
+        }
+        let cadastro = {
+            email: email,
+            nome: nome,
+            senha: senha
+        };
+        let cadastro2 = JSON.stringify(cadastro);
+        localStorage.setItem("cadastro", cadastro2);
+    }
+    catch(error){
+        alert("Erro ao cadastrar!!!");
+    }
+    alert("Cadastro realizado com sucesso!!!!");
+    window.location.href = "login.html";
+
+}
+function m_usuario(){
+    let dados = localStorage.getItem("cadastro");
+    dados = JSON.parse(dados);
+    document.getElementById("m_nome_user").innerHTML = dados.nome;
+}
