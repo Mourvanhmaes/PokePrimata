@@ -5,6 +5,68 @@ let m_aux_evo = 0;
 let m_dica_aux = 0;
 let m_jogo_id = 0;
 let m_cont_menu = 0;
+let m_h_lupa = 0;
+function getFavorites() {
+    return JSON.parse(localStorage.getItem('favorites') || '[]');
+}
+
+function m_toggle_favorite(id, btn) {
+    let favorites = getFavorites();
+    let isFav = favorites.includes(id);
+    if (isFav) {
+        favorites = favorites.filter(f => f !== id);
+        btn.innerHTML = '♡';
+        btn.style.color = 'gray';
+    } else {
+        favorites.push(id);
+        btn.innerHTML = '♥';
+        btn.style.color = 'red';
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+async function m_show_favorites() {
+    let favorites = getFavorites();
+    if (favorites.length === 0) {
+        document.querySelector(".m_cards").innerHTML = "<p>Nenhum Pokémon favorito adicionado ainda.</p>";
+        return;
+    }
+    let pokemon = document.querySelector(".m_cards");
+    pokemon.innerHTML = "";
+    for (let id of favorites) {
+        let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        let dados = await resposta.json();
+        let img = dados.sprites.other['official-artwork'].front_default;
+        let tipos = dados.types.map(t => t.type.name);
+        let heart = '♥';
+        let heartColor = 'red';
+        pokemon.innerHTML += `
+            <div class="m_card" onclick="m_enviar_dados(${dados.id})" style="position: relative;">
+                <div class="m_card_id">
+                    <h5>#${String(dados.id).padStart(3, "0")}</h5>
+                </div>
+                <div class="m_card_info">
+                    <img src="${img}" alt="${dados.name}">
+                    <h3>${dados.name}</h3>
+                    <div class="m_poke_tipo">
+                        ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+                <button class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="border-radius: 50%; width: 30px; height: 30px; border: none; background-color: rgba(255, 255, 255, 0.7); font-size: 16px; cursor: pointer; position: absolute; top: 5px; left: 5px; color: ${heartColor};">${heart}</button>
+            </div>
+        `;
+    }
+    let header = document.querySelector(".m_barra_pesq"); // Ajustar seletor conforme HTML
+    if (!document.getElementById("back_to_list")) {
+        let backBtn = document.createElement("button");
+        backBtn.id = "back_to_list";
+        backBtn.innerHTML = "Voltar à Lista";
+        backBtn.onclick = () => m_index_poke(m_calculo_pag());
+        backBtn.style.margin = "10px";
+        header.appendChild(backBtn);
+    }
+}
+
 async function m_busca_pokemon(n){
     m_poke_id = n;
     let antes = n - 1;
@@ -56,6 +118,10 @@ async function m_busca_pokemon(n){
         case "fairy": fraquezas.push("poison", "steel"); break;
         default: break;
     }
+    let favorites = getFavorites();
+    let isFav = favorites.includes(dados.id);
+    let heart = isFav ? '♥' : '♡';
+    let heartColor = isFav ? 'red' : 'gray';
     pokemon.innerHTML = `
         <div class="m_barra_pesq">
             <img src="img/lupa.svg" alt="lupa">
@@ -98,7 +164,7 @@ async function m_busca_pokemon(n){
                     ${habilidades.map(h => `<p>${h}</p>`).join(" ")}
                 </div>
                 <div class="m_poke_estrelas">
-                    <img src="img/estrela_apagada.svg" alt="estrela_apagada">
+                    <div class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
                 </div>
             </div>
             <img src="img/caret-right.svg" alt="seta direita" class="m_poke_setas" onclick="m_poke_prox()">
@@ -183,14 +249,18 @@ async function m_index_poke(n){
     else{
         incial = n - 24;
     }
+    let favorites = getFavorites();
     for(let i = incial; i <= n; i++){
         let pokemon = document.querySelector(".m_cards");
         let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}`);
         let dados = await resposta.json();
         let img = dados.sprites.other['official-artwork'].front_default;
         let tipos = dados.types.map(t => t.type.name);
+        let isFav = favorites.includes(dados.id);
+        let heart = isFav ? '♥' : '♡';
+        let heartColor = isFav ? 'red' : 'gray';
         pokemon.innerHTML += `
-            <div class="m_card" onclick="m_enviar_dados(${dados.id})">
+            <div class="m_card" onclick="m_enviar_dados(${dados.id})" style="position: relative;">
                 <div class="m_card_id">
                     <h5>#${String(dados.id).padStart(3, "0")}</h5>
                 </div>
@@ -201,6 +271,7 @@ async function m_index_poke(n){
                         ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
                     </div>
                 </div>
+                <button class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="border-radius: 50%; width: 30px; height: 30px; border: none; background-color: rgba(255, 255, 255, 0.7); font-size: 16px; cursor: pointer; position: absolute; top: 5px; left: 5px; color: ${heartColor};">${heart}</button>
             </div>
         `;
     }
@@ -482,6 +553,7 @@ async function m_filtrar(n){
         incial = n - 24;
         aux_pag = 0;
     }
+    let favorites = getFavorites();
     
     for(let i = incial; i <= n - aux_pag; i++){
         let poke_tipo = dados1.pokemon[i].pokemon.name;
@@ -489,8 +561,11 @@ async function m_filtrar(n){
         let dados = await resposta.json();
         let img = dados.sprites.other['official-artwork'].front_default;
         let tipos = dados.types.map(t => t.type.name);
+        let isFav = favorites.includes(dados.id);
+        let heart = isFav ? '♥' : '♡';
+        let heartColor = isFav ? 'red' : 'gray';
         pokemon.innerHTML += `
-            <div class="m_card" onclick="m_enviar_dados(${dados.id})">
+            <div class="m_card" onclick="m_enviar_dados(${dados.id})" style="position: relative;">
                 <div class="m_card_id">
                     <h5>#${String(dados.id).padStart(3, "0")}</h5>
                 </div>
@@ -501,6 +576,7 @@ async function m_filtrar(n){
                         ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
                     </div>
                 </div>
+                <button class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="border-radius: 50%; width: 30px; height: 30px; border: none; background-color: rgba(255, 255, 255, 0.7); font-size: 16px; cursor: pointer; position: absolute; top: 5px; left: 5px; color: ${heartColor};">${heart}</button>
             </div>
         `;
     }
@@ -531,8 +607,12 @@ async function m_pesquisa_poke(){
     let dados = await resposta.json();
     let img = dados.sprites.other['official-artwork'].front_default;
     let tipos = dados.types.map(t => t.type.name);
+    let favorites = getFavorites();
+    let isFav = favorites.includes(dados.id);
+    let heart = isFav ? '♥' : '♡';
+    let heartColor = isFav ? 'red' : 'gray';
     pokemon.innerHTML += `
-       <div class="m_card" onclick="m_enviar_dados(${dados.id})">
+       <div class="m_card" onclick="m_enviar_dados(${dados.id})" style="position: relative;">
            <div class="m_card_id">
                <h5>#${String(dados.id).padStart(3, "0")}</h5>
            </div>
@@ -543,6 +623,7 @@ async function m_pesquisa_poke(){
                     ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
                 </div>
             </div>
+            <button class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="border-radius: 50%; width: 30px; height: 30px; border: none; background-color: rgba(255, 255, 255, 0.7); font-size: 16px; cursor: pointer; position: absolute; top: 5px; left: 5px; color: ${heartColor};">${heart}</button>
         </div>
     `;
 }
@@ -557,17 +638,9 @@ function m_menu_lateral(){
         m_cont_menu = 0;
     }
 }
-window.addEventListener("scroll", function() {
-    let menu = document.querySelector(".m_menu_lateral");
-    if (m_cont_menu == 1) {
-        menu.style.right = "-100%";
-        m_cont_menu = 0;
-    }
-});
 m_jogo_poke();  
 m_index_poke(m_calculo_pag());
 m_busca_id();
-m_usuario();
 
 // -----login-----
 function m_login(){
@@ -613,8 +686,32 @@ function m_cadastro(){
     window.location.href = "login.html";
 
 }
-function m_usuario(){
-    let dados = localStorage.getItem("cadastro");
-    dados = JSON.parse(dados);
-    document.getElementById("m_nome_user").innerHTML = dados.nome;
+// add favoritos na pagina pokemon
+function m_add_favoritos(n){
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+window.addEventListener("scroll", function() { //fecha o menu lateral ao rolar a pagina
+    let menu = document.querySelector(".m_menu_lateral");
+    if (m_cont_menu == 1) {
+        menu.style.right = "-100%";
+        m_cont_menu = 0;
+    }
+});
+
+function m_lupa_header(){
+    let barra = document.querySelector(".m_h_lupa");
+    if(m_h_lupa == 0){
+        m_h_lupa = 1;
+        barra.style.opacity = "1";
+        barra.style.pointerEvents = "auto";
+    }
+    else{
+        m_h_lupa = 0;
+        barra.style.opacity = "0";
+        barra.style.pointerEvents = "none";
+    }
+}
+function m_lupa(){
+    
 }

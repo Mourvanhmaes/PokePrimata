@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    
     <header>
         <div class="m_header_home">
             <a href="index.html">
@@ -17,13 +18,17 @@
         </div>
         <nav class="m_header_nav">
             <a href="index.html" class="m_header_a m_header_marcado">Inicio</a>
-            <a href="#" class="m_header_a">Times</a>
+            <a href="times.html" class="m_header_a">Times</a>
             <a href="pokemon.html" class="m_header_a">Pokémon</a>
-            <a href="#" class="m_header_a">Favoritos</a>
+            <a href="favorites.html" class="m_header_a">Favoritos</a>
             <a href="jogo.html" class="m_header_a">Jogos</a>
         </nav>
         <div class="m_header_direito">
-            <a href="#"><img src="img/lupa.svg" alt="lupa" class="m_header_lupa"></a>
+            <div class="m_h_lupa">
+                <input type="text" placeholder="Buscar Pokémon por nome, numero...." id="m_pesquisa_lupa">
+                <button onclick="m_lupa()">Buscar</button>
+            </div>
+            <img src="img/lupa.svg" alt="lupa" class="m_header_lupa" onclick="m_lupa_header()">
             <a href="login.html" class="m_header_botao_login">LOGIN</a>
             <img src="img/menu.svg" alt="menu" class="m_header_menu" onclick="m_menu_lateral()">
         </div>
@@ -37,7 +42,7 @@
                 </a>
             </div>
             <div class="m_lat_nav">
-                <a href="#" class="m_lat_a">
+                <a href="times.html" class="m_lat_a">
                     <img src="img/sword.png" alt="espada">
                     Times
                 </a>
@@ -49,7 +54,7 @@
                 </a>
             </div>
             <div class="m_lat_nav">
-                <a href="#" class="m_lat_a">
+                <a href="favorites.html" class="m_lat_a">
                     <img src="img/star.svg" alt="star">
                     Favoritos
                 </a>
@@ -62,10 +67,6 @@
             </div>
         </nav>
         <br>
-        <div class="m_user">
-            <img src="img/user.png" alt="usuario">
-            <h3 id="m_nome_user">Anonimo</h3>
-        </div>
         <img src="img/poke_primata.svg" alt="logo" class="m_menu_logo">
         <h1>POKEPRIMATA</h1>
     </div>
@@ -135,7 +136,7 @@
                     <a href="pokemon.html">Pokémon</a>
                     <a href="times.html">Times</a>
                     <a href="jogo.html">Jogos</a>
-                    <a href="favoritos.html">Favoritos</a>
+                    <a href="favorites.html">Favoritos</a>
                 </div>
             </div>
             <div class="m_f_nav">

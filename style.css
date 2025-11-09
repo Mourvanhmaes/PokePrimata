@@ -114,6 +114,42 @@ header{
 }
 .m_header_lupa{
     width: 1rem;
+    cursor: pointer;
+}
+.m_h_lupa{
+    position: absolute;
+    opacity: 0;
+    top: 1.3rem;
+    right: 8rem;
+    width: 20rem;
+    display: flex;
+    pointer-events: none;
+    border: 1px solid rgb(195, 195, 195);
+    border-radius: 0.4rem;
+    transition: 0.5s;
+    transform: translateY(-10px);
+}
+
+#m_pesquisa_lupa{
+    height: 1rem;
+    width: 40rem;
+    background-color: #02020C;
+    border: none;
+    margin: 0.1rem;
+    color: var(--branco);
+}
+#m_pesquisa_lupa:focus{
+    outline: none;
+    border: none;
+}
+.m_h_lupa button{
+    background-color: #2E798D;
+    border: none;
+    border-top-right-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    font-family: var(--mont);
+    font-weight: bolder;
+    cursor: pointer;
 }
 .m_header_menu{
     width: 1.5rem;
@@ -374,6 +410,18 @@ header{
     filter: invert(100);
     width: 1.5rem;
     cursor: pointer;
+}
+
+.m_poke_estrelas div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(255, 255, 255, 0.7);
+    font-size: 20px; 
+    cursor: pointer; 
 }
 /* ---------------------------------index--------------------------- */
 .m_index{
@@ -1178,14 +1226,120 @@ footer{
 .m_menu_logo{
     width: 5rem;
 }
-.m_user{
-    color: var(--branco);
-    display: flex;
-    align-items: center;
-    gap: 0.2rem;
-    justify-content: center ;
+.card { position: relative; }
+.fav-btn {
+  position: absolute;
+  top: .5rem; right: .5rem;
+  font-size: 1.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
 }
-.m_user img{
-    filter: invert(100);
-    width: 2rem;
+.fav-btn.is-fav { transform: scale(1.05); }
+.fav-btn:focus { outline: 2px solid #999; outline-offset: 2px; }
+/* === Botão de favorito no card === */
+.m_card { position: relative; } /* garante que o botão posicione no card */
+
+.p_fav{
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.14);
+  background: rgba(14,19,32,.70);
+  cursor: pointer;
+  transition: transform .15s ease, background .2s ease, border-color .2s ease;
+  z-index: 3;
 }
+
+.p_fav:hover{ transform: scale(1.04); }
+
+.p_fav svg{
+  width: 14px;
+  height: 14px;
+  fill: #9fb0c6; /* cor neutra */
+  pointer-events: none;
+}
+
+/* estado favoritado */
+.p_fav.is-fav{
+  background: rgba(20,205,255,.14);
+  border-color: rgba(20,205,255,.45);
+}
+.p_fav.is-fav svg{
+  fill: var(--azul-botao);
+  filter: drop-shadow(0 0 6px rgba(20,205,255,.55));
+}
+/* --- Favoritos nos cards --- */
+.m_card { 
+  position: relative; 
+  overflow: hidden;              /* mantém o botão dentro do card */
+}
+
+.m_fav_btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+
+  /* glassmorphism */
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  color: #cfd8e3;
+
+  cursor: pointer;
+  outline: none;
+  transition:
+    transform .15s ease,
+    background .2s ease,
+    border-color .2s ease,
+    color .2s ease,
+    box-shadow .2s ease;
+}
+
+.m_fav_btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.30);
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+.m_fav_btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.m_fav_btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.15);
+}
+
+/* Estado favoritado */
+.m_fav_btn.is-fav {
+  color: #ffd166;                                   /* dourado */
+  background: rgba(255,209,102,0.12);
+  border-color: rgba(255,209,102,0.6);
+  text-shadow: 0 0 12px rgba(255,209,102,0.6);
+}
+
+/* Ajuste fino para telas pequenas */
+@media (max-width: 480px) {
+  .m_fav_btn { width: 34px; height: 34px; font-size: 17px; top: 8px; right: 8px; }
+}
+
