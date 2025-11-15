@@ -638,7 +638,93 @@ function m_menu_lateral(){
         m_cont_menu = 0;
     }
 }
+async function m_carrosel(){
+    let pokemon = document.querySelector(".m_c_cards");
+    let dados;
+    pokemon.innerHTML = "";
+    for(let i = 0; i < 6; i++){
+        dados = await m_busca_carrosel();
+        if(i == 1){
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_terceiro_left">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `
+        }
+        else if(i == 2){
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_segundo_left">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `
+        }
+        else if(i == 3){
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_principal">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `
+        }
+                
+        else if(i == 4){
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_segundo_right">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `
+        }        
+        else if(i == 5){
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_terceiro_right">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `
+        }
+    }
+
+}
+async function m_busca_carrosel(){
+    let n = m_gerador(1, 900);
+    let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${n}`);
+    let dados = await resposta.json();
+    let img = dados.sprites.other['official-artwork'].front_default;
+    let id = dados.id;
+    let nome = dados.name;
+    let tipos = dados.types.map(t => t.type.name);
+    return{
+        id,
+        nome,
+        img,
+        tipos
+    }
+}
 m_jogo_poke();  
+m_carrosel();
 m_index_poke(m_calculo_pag());
 m_busca_id();
 
