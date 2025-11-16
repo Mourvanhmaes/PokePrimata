@@ -643,96 +643,40 @@ function m_menu_lateral(){
 async function m_carrosel(n){
     let pokemon = document.querySelector(".m_c_cards");
     let dados;
-    pokemon.innerHTML = "";
-    for(let i = 0; i < 6; i++){
-        if(n == 1){
+    if(n == 1){
+        for(let i = 1; i < 6; i++){
             dados = await m_busca_carrosel(0);
             m_c_vetor.push(dados.id);
+            m_posicao_carrousel = i;
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_${i} m_card_anim" onclick="m_enviar_dados(${dados.id})">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `;
         }
-        else if(n == 2){
+    }
+    else if(n == 2){
+        for(let i = 0; i < 5; i++){
             dados = await m_busca_carrosel(m_c_vetor[i]);
-        }
-        m_posicao_carrousel = i;
-        switch(i){
-            case 1:
-                pokemon.innerHTML += `
-                    <div class="m_c_card m_c_terceiro_left" onclick="m_enviar_dados(${dados.id})">
-                        <img src="${dados.img}" alt="pokemon">
-                        <p>#${dados.id}</p>
-                        <h2>${dados.nome}</h2>
-                        <div class="m_poke_tipo">
-                            ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
-                        </div>
-                    </div>
-                `
-                document.querySelector(".m_c_ball1").style.transform = "scale(1.5)";
-                break;
-            case 2:
-                pokemon.innerHTML += `
-                    <div class="m_c_card m_c_segundo_left" onclick="m_enviar_dados(${dados.id})">
-                        <img src="${dados.img}" alt="pokemon">
-                        <p>#${dados.id}</p>
-                        <h2>${dados.nome}</h2>
-                        <div class="m_poke_tipo">
-                            ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
-                        </div>
-                    </div>
-                `
-                document.querySelector(".m_c_ball2").style.transform = "scale(1.5)";
-                break;
-            case 3:
-                pokemon.innerHTML += `
-                    <div class="m_c_card m_c_principal" onclick="m_enviar_dados(${dados.id})">
-                        <img src="${dados.img}" alt="pokemon">
-                        <p>#${dados.id}</p>
-                        <h2>${dados.nome}</h2>
-                        <div class="m_poke_tipo">
-                            ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
-                        </div>
-                    </div>
-                `
-                document.querySelector(".m_c_ball3").style.transform = "scale(1.5)";
-                break;
-            case 4:
-                pokemon.innerHTML += `
-                    <div class="m_c_card m_c_segundo_right" onclick="m_enviar_dados(${dados.id})">
-                        <img src="${dados.img}" alt="pokemon">
-                        <p>#${dados.id}</p>
-                        <h2>${dados.nome}</h2>
-                        <div class="m_poke_tipo">
-                            ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
-                        </div>
-                    </div>
-                `  
-                document.querySelector(".m_c_ball4").style.transform = "scale(1.5)";
-                break;
-            case 5:
-                pokemon.innerHTML += `
-                    <div class="m_c_card m_c_terceiro_right" onclick="m_enviar_dados(${dados.id})">
-                        <img src="${dados.img}" alt="pokemon">
-                        <p>#${dados.id}</p>
-                        <h2>${dados.nome}</h2>
-                        <div class="m_poke_tipo">
-                            ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
-                        </div>
-                    </div>
-                `
-                document.querySelector(".m_c_ball5").style.transform = "scale(1.5)";
-                break;
+            let card = document.querySelector(`.m_c_${i + 1}`);
+            card.innerHTML = `
+                <img src="${dados.img}" alt="pokemon">
+                <p>#${dados.id}</p>
+                <h2>${dados.nome}</h2>
+                <div class="m_poke_tipo">
+                    ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                </div>
+            `;
         }
 
     }
 
 }
-document.addEventListener("click", (event) => {
-    if (event.target.classList.contains(`m_c_ball${m_posicao_carrousel + 1}`)) {
-        m_carrosel(1);
-    }
-    if (event.target.classList.contains(`m_c_ball1`)) {
-        m_carrosel(2);
-    }
-
-});
 
 async function m_busca_carrosel(busca){
     let n;
@@ -755,13 +699,21 @@ async function m_busca_carrosel(busca){
         tipos
     }
 }
+function m_girar_vetor(){
+    let primeiro = m_c_vetor.shift();
+    m_c_vetor.push(primeiro);        
+    m_carrosel(2);
+}
+setInterval(m_girar_vetor, 3000);
+
 m_jogo_poke();  
 m_carrosel(1);
 m_index_poke(m_calculo_pag());
 m_busca_id();
+
 document.addEventListener("mouseenter", (card) => {
-    let principal = document.querySelector(".m_c_principal");
-    if (card.target.classList.contains("m_c_card") && !card.target.classList.contains("m_c_principal")) {
+    let principal = document.querySelector(".m_c_3");
+    if (card.target.classList.contains("m_c_card") && !card.target.classList.contains("m_c_3")) {
         card.target.style.transform = "scale(1.15)"
         card.target.style.filter = "blur(0)"
         card.target.style.zIndex = "996"
@@ -771,7 +723,7 @@ document.addEventListener("mouseenter", (card) => {
 }, true);
 
 document.addEventListener("mouseleave", (card) => {
-    let principal = document.querySelector(".m_c_principal");
+    let principal = document.querySelector(".m_c_3");
     if (card.target.classList.contains("m_c_card")) {
         card.target.style.background = "";
         card.target.style.transform = ""
@@ -856,3 +808,18 @@ function m_lupa_header(){
 function m_lupa(){
     
 }
+
+// ---------------times------------------
+document.addEventListener("mouseenter", (card) => {
+    let lixo = document.querySelector(".m_t_card_lixo");
+    if (card.target.classList.contains("m_t_card")) {
+        lixo.style.marginLeft = "-5rem";
+    }
+}, true);
+
+document.addEventListener("mouseleave", (card) => {
+    let lixo = document.querySelector(".m_t_card_lixo");
+    if (card.target.classList.contains("m_t_card")) {
+        lixo.style.marginLeft = "-20rem";
+    }
+}, true);
