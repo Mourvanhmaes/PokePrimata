@@ -1463,6 +1463,17 @@ footer{
     url("img/fundo_index.svg");
 }
 /* ----------------------------------------times------------------------------------ */
+.t_main{
+    background-image: linear-gradient(
+        rgba(15, 15, 15, 0.78),
+        rgba(15, 15, 15, 0.78)
+    ),
+    url("img/fundo_time.svg");
+    padding-bottom: 2rem;
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
 .m_lista_times{
     display: flex;
     justify-content: center;
@@ -1492,6 +1503,9 @@ footer{
 }
 .m_t_card_dados{
     font-family: var(--mont);
+}
+.m_t_card_dados .m_poke_tipo h4{
+    font-size: 110%;
 }
 .m_t_card_dados p{
     font-size: 150%;
@@ -1524,4 +1538,54 @@ footer{
     margin-left: -20rem;
     transition: 0.5s;
     cursor: pointer;
+}
+.m_times_titulo{
+    text-align: center;
+    padding: 2rem 0 2rem 0;
+    color: white;
+}
+.m_times_titulo h1{
+    font-family: var(--jersey);
+    font-size: 300%;
+}
+.m_times_titulo h4{
+    font-family: var(--mont);
+}
+.no-teams{
+    padding-top: 10rem;
+    font-size: 150%;
+    color: white;
+    font-family: var(--mont);
+}
+.m_t_atalhos{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1rem;
+    gap: 1rem;
+}
+.m_t_atalhos_apagar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    border-radius: 3rem;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+}
+.m_t_atalhos_apagar img{
+    width: 2rem;
+}
+.m_t_atalhos_voltar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(89, 0, 255);
+    border-radius: 3rem;
+    width: 3rem;
+    height: 3rem;
+}
+.m_t_atalhos_voltar img{
+    width: 2rem;
 }

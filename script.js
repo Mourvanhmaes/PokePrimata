@@ -283,20 +283,25 @@ async function m_index_poke(n){
     }
     });
 }
-function m_enviar_dados(id){
-    let dados = JSON.stringify(id);
+function m_enviar_dados(dados){
     localStorage.setItem("dados", dados);
     window.location.href = "pokemon.html";
 }
 
-function m_busca_id(){
+async function m_busca_id(){
     let id = localStorage.getItem("dados");
-    let dados = JSON.parse(id);
-    if(dados <= 0){
+    if(!id || id == ""){
         m_poke_id = 1;
     }
+    else if (!isNaN(id)){
+        let n = Number(id);
+        if(n < 0) n = 1;
+        m_poke_id = n;
+    }
     else{
-        m_poke_id = dados;
+        let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        let dados = await resposta.json();
+        m_poke_id = dados.id;
     }
     m_busca_pokemon(m_poke_id);
 }
@@ -387,7 +392,7 @@ async function m_busca_evo(nome){
         `).join("")}
     </div>`;
 }
-async function  m_pesquisa(){
+async function m_pesquisa(n){
     let m_pesq = document.getElementById("m_pesquisa").value;
     let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${m_pesq}`);
     let dados = await resposta.json();
@@ -706,6 +711,67 @@ function m_girar_vetor(){
 }
 setInterval(m_girar_vetor, 3000);
 
+async function m_times(){
+    let time = getTeams();
+    let cards = document.querySelector(".m_lista_times");
+    if (time.length === 0) {
+        cards.innerHTML = '<p class="no-teams">Nenhum Pokémon adicionado ao time ainda.</p>';
+        return;
+    }
+    for(let id of time){
+        try{
+            let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            let dados = await resposta.json();
+            let img = dados.sprites.other['official-artwork'].front_default;
+            let tipos = dados.types.map(t => t.type.name);
+            cards.innerHTML += `
+                <div class="m_t_card">
+                    <div class="m_t_card_principal">
+                        <img src="img/correto_desmarcado.svg" alt="correto_desmarcado" class="m_t_correto">
+                        <div class="m_t_card_dados">
+                            <p>#${String(dados.id).padStart(3, "0")}</p>
+                            <h1>${dados.name}</h1>
+                            <div class="m_poke_tipo">
+                                ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                            </div>
+                        </div>
+                        <div class="m_t_card_img m_t_${dados.id}">
+                            <img src="${img}" alt="${dados.name}">
+                        </div>
+                    </div>
+                    <div class="m_t_card_lixo">
+                        <img src="img/lixeira.svg" alt="lixeira" onclick="m_excluir_time(${dados.id})">
+                    </div>
+                </div>
+
+            `;
+            let poke_cor = document.querySelector(`.m_t_${dados.id}`);
+            poke_cor.style.backgroundColor = `var(--${tipos[0]})`;
+        }
+        catch(error){
+            alert("Erro ao carregar os Times");
+        }
+    }
+}
+function m_excluir_time(id){
+    let remover = JSON.parse(localStorage.getItem("teams"));
+    remover = remover.filter(item => item !== id);
+    localStorage.setItem("teams", JSON.stringify(remover));
+    location.reload();
+}
+function m_excluir_time_tudo(){
+    if(confirm("Deseja excluir todos os pokemons da lista de times!!")){
+        localStorage.removeItem("teams");
+        location.reload();
+    }
+    else{
+        return;
+    }
+}
+
+function getTeams() {
+    return JSON.parse(localStorage.getItem('teams') || '[]');
+}
 m_jogo_poke();  
 m_carrosel(1);
 m_index_poke(m_calculo_pag());
@@ -806,20 +872,24 @@ function m_lupa_header(){
     }
 }
 function m_lupa(){
-    
+    let pesquisa = document.getElementById("m_pesquisa_lupa").value;
+    m_enviar_dados(pesquisa);
 }
 
 // ---------------times------------------
+if (location.pathname === "/times.html") {
+    m_times();
+}
 document.addEventListener("mouseenter", (card) => {
-    let lixo = document.querySelector(".m_t_card_lixo");
     if (card.target.classList.contains("m_t_card")) {
+        let lixo = card.target.querySelector(".m_t_card_lixo");
         lixo.style.marginLeft = "-5rem";
     }
 }, true);
 
 document.addEventListener("mouseleave", (card) => {
-    let lixo = document.querySelector(".m_t_card_lixo");
     if (card.target.classList.contains("m_t_card")) {
+        let lixo = card.target.querySelector(".m_t_card_lixo");
         lixo.style.marginLeft = "-20rem";
     }
 }, true);
