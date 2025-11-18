@@ -11,6 +11,23 @@ let m_c_vetor = [];
 function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
 }
+function getTeams() {
+    return JSON.parse(localStorage.getItem('teams') || '[]');
+}
+function toggleTeam(id, btn) {
+    let teams = getTeams();
+    let isTeam = teams.includes(id);
+    if (isTeam) {
+        teams = teams.filter(t => t !== id);
+        btn.innerHTML = '☆';
+        btn.style.color = 'gray';
+    } else {
+        teams.push(id);
+        btn.innerHTML = '★';
+        btn.style.color = 'gold';
+    }
+    localStorage.setItem('teams', JSON.stringify(teams));
+}
 
 function m_toggle_favorite(id, btn) {
     let favorites = getFavorites();
@@ -124,6 +141,10 @@ async function m_busca_pokemon(n){
     let isFav = favorites.includes(dados.id);
     let heart = isFav ? '♥' : '♡';
     let heartColor = isFav ? 'red' : 'gray';
+    let teams = getTeams();
+    let isTeam = teams.includes(dados.id);
+    let star = isTeam ? '★' : '☆';
+    let starColor = isTeam ? 'gold' : 'gray';
     pokemon.innerHTML = `
         <div class="m_barra_pesq">
             <img src="img/lupa.svg" alt="lupa">
@@ -167,6 +188,7 @@ async function m_busca_pokemon(n){
                 </div>
                 <div class="m_poke_estrelas">
                     <div class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
+                    <div class="m_star_btn" title="Adicionar ao Time" onclick="toggleTeam(${dados.id}, this); event.stopPropagation();" style="color: ${starColor};">${star}</div>
                 </div>
             </div>
             <img src="img/caret-right.svg" alt="seta direita" class="m_poke_setas" onclick="m_poke_prox()">
@@ -669,6 +691,8 @@ async function m_carrosel(n){
         for(let i = 0; i < 5; i++){
             dados = await m_busca_carrosel(m_c_vetor[i]);
             let card = document.querySelector(`.m_c_${i + 1}`);
+            card.removeAttribute("onclick");
+            card.onclick = () => m_enviar_dados(m_c_vetor[i]);
             card.innerHTML = `
                 <img src="${dados.img}" alt="pokemon">
                 <p>#${dados.id}</p>
@@ -726,7 +750,7 @@ async function m_times(){
             let tipos = dados.types.map(t => t.type.name);
             cards.innerHTML += `
                 <div class="m_t_card">
-                    <div class="m_t_card_principal">
+                    <div class="m_t_card_principal" onclick="m_enviar_dados(${dados.id})">
                         <img src="img/correto_desmarcado.svg" alt="correto_desmarcado" class="m_t_correto">
                         <div class="m_t_card_dados">
                             <p>#${String(dados.id).padStart(3, "0")}</p>

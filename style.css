@@ -411,7 +411,12 @@ header{
     width: 1.5rem;
     cursor: pointer;
 }
-
+.m_poke_estrelas{
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    flex-direction: column;
+}
 .m_poke_estrelas div{
     display: flex;
     align-items: center;
@@ -421,7 +426,7 @@ header{
     height: 2rem;
     background-color: rgba(255, 255, 255, 0.7);
     font-size: 20px; 
-    cursor: pointer; 
+    cursor: pointer;
 }
 /* ---------------------------------index--------------------------- */
 .m_index{
@@ -1500,6 +1505,7 @@ footer{
     padding-top: 0;
     padding-bottom: 0;
     z-index: 999;
+    cursor: pointer;
 }
 .m_t_card_dados{
     font-family: var(--mont);
