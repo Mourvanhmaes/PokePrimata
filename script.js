@@ -5,9 +5,29 @@ let m_aux_evo = 0;
 let m_dica_aux = 0;
 let m_jogo_id = 0;
 let m_cont_menu = 0;
-
+let m_h_lupa = 0;
+let m_posicao_carrousel = 0;
+let m_c_vetor = [];
+let m_vetor_marcados = [];
 function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
+}
+function getTeams() {
+    return JSON.parse(localStorage.getItem('teams') || '[]');
+}
+function toggleTeam(id, btn) {
+    let teams = getTeams();
+    let isTeam = teams.includes(id);
+    if (isTeam) {
+        teams = teams.filter(t => t !== id);
+        btn.innerHTML = '☆';
+        btn.style.color = 'gray';
+    } else {
+        teams.push(id);
+        btn.innerHTML = '★';
+        btn.style.color = 'gold';
+    }
+    localStorage.setItem('teams', JSON.stringify(teams));
 }
 
 function m_toggle_favorite(id, btn) {
@@ -56,8 +76,6 @@ async function m_show_favorites() {
             </div>
         `;
     }
-    // Adicionar botão de voltar se necessário, assumindo que há um header ou menu
-    // Por exemplo, adicionar um botão acima dos cards
     let header = document.querySelector(".m_barra_pesq"); // Ajustar seletor conforme HTML
     if (!document.getElementById("back_to_list")) {
         let backBtn = document.createElement("button");
@@ -120,6 +138,14 @@ async function m_busca_pokemon(n){
         case "fairy": fraquezas.push("poison", "steel"); break;
         default: break;
     }
+    let favorites = getFavorites();
+    let isFav = favorites.includes(dados.id);
+    let heart = isFav ? '♥' : '♡';
+    let heartColor = isFav ? 'red' : 'gray';
+    let teams = getTeams();
+    let isTeam = teams.includes(dados.id);
+    let star = isTeam ? '★' : '☆';
+    let starColor = isTeam ? 'gold' : 'gray';
     pokemon.innerHTML = `
         <div class="m_barra_pesq">
             <img src="img/lupa.svg" alt="lupa">
@@ -162,7 +188,8 @@ async function m_busca_pokemon(n){
                     ${habilidades.map(h => `<p>${h}</p>`).join(" ")}
                 </div>
                 <div class="m_poke_estrelas">
-                    <img src="img/estrela_apagada.svg" alt="estrela_apagada">
+                    <div class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
+                    <div class="m_star_btn" title="Adicionar ao Time" onclick="toggleTeam(${dados.id}, this); event.stopPropagation();" style="color: ${starColor};">${star}</div>
                 </div>
             </div>
             <img src="img/caret-right.svg" alt="seta direita" class="m_poke_setas" onclick="m_poke_prox()">
@@ -279,20 +306,25 @@ async function m_index_poke(n){
     }
     });
 }
-function m_enviar_dados(id){
-    let dados = JSON.stringify(id);
+function m_enviar_dados(dados){
     localStorage.setItem("dados", dados);
     window.location.href = "pokemon.html";
 }
 
-function m_busca_id(){
+async function m_busca_id(){
     let id = localStorage.getItem("dados");
-    let dados = JSON.parse(id);
-    if(dados <= 0){
+    if(!id || id == ""){
         m_poke_id = 1;
     }
+    else if (!isNaN(id)){
+        let n = Number(id);
+        if(n < 0) n = 1;
+        m_poke_id = n;
+    }
     else{
-        m_poke_id = dados;
+        let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        let dados = await resposta.json();
+        m_poke_id = dados.id;
     }
     m_busca_pokemon(m_poke_id);
 }
@@ -383,7 +415,7 @@ async function m_busca_evo(nome){
         `).join("")}
     </div>`;
 }
-async function  m_pesquisa(){
+async function m_pesquisa(n){
     let m_pesq = document.getElementById("m_pesquisa").value;
     let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${m_pesq}`);
     let dados = await resposta.json();
@@ -636,9 +668,196 @@ function m_menu_lateral(){
         m_cont_menu = 0;
     }
 }
+async function m_carrosel(n){
+    let pokemon = document.querySelector(".m_c_cards");
+    let dados;
+    if(n == 1){
+        for(let i = 1; i < 6; i++){
+            dados = await m_busca_carrosel(0);
+            m_c_vetor.push(dados.id);
+            m_posicao_carrousel = i;
+            pokemon.innerHTML += `
+                <div class="m_c_card m_c_${i} m_card_anim" onclick="m_enviar_dados(${dados.id})">
+                    <img src="${dados.img}" alt="pokemon">
+                    <p>#${dados.id}</p>
+                    <h2>${dados.nome}</h2>
+                    <div class="m_poke_tipo">
+                        ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    }
+    else if(n == 2){
+        for(let i = 0; i < 5; i++){
+            dados = await m_busca_carrosel(m_c_vetor[i]);
+            let card = document.querySelector(`.m_c_${i + 1}`);
+            card.removeAttribute("onclick");
+            card.onclick = () => m_enviar_dados(m_c_vetor[i]);
+            card.innerHTML = `
+                <img src="${dados.img}" alt="pokemon">
+                <p>#${dados.id}</p>
+                <h2>${dados.nome}</h2>
+                <div class="m_poke_tipo">
+                    ${dados.tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                </div>
+            `;
+        }
+
+    }
+
+}
+
+async function m_busca_carrosel(busca){
+    let n;
+    if (busca == 0){
+       n = m_gerador(1, 900);
+    }
+    else{
+        n = busca;
+    }
+    let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${n}`);
+    let dados = await resposta.json();
+    let img = dados.sprites.other['official-artwork'].front_default;
+    let id = dados.id;
+    let nome = dados.name;
+    let tipos = dados.types.map(t => t.type.name);
+    return{
+        id,
+        nome,
+        img,
+        tipos
+    }
+}
+function m_girar_vetor(){
+    let primeiro = m_c_vetor.shift();
+    m_c_vetor.push(primeiro);        
+    m_carrosel(2);
+}
+setInterval(m_girar_vetor, 3000);
+
+async function m_times(){
+    let time = getTeams();
+    let cards = document.querySelector(".m_lista_times");
+    if (time.length === 0) {
+        cards.innerHTML = '<p class="no-teams">Nenhum Pokémon adicionado ao time ainda.</p>';
+        return;
+    }
+    for(let id of time){
+        try{
+            let resposta = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            let dados = await resposta.json();
+            let img = dados.sprites.other['official-artwork'].front_default;
+            let tipos = dados.types.map(t => t.type.name);
+            cards.innerHTML += `
+                <div class="m_t_card">
+                    <div class="m_t_card_principal" onclick="m_enviar_dados(${dados.id})">
+                        <input type="checkbox" name="marcar" id="m_t_marcado${dados.id}" class="m_t_marcado" value="${dados.id}" onclick="event.stopPropagation()">
+                        <label for="m_t_marcado${dados.id}" class="m_t_correto" onclick="m_troca_correto(event, ${dados.id})">
+                            <img src="img/correto_desmarcado.svg" alt="correto_desmarcado" class=" m_correto_desmarcado m_correto_desmarcado${dados.id}">
+                            <img src="img/correto_marcado.svg" alt="correto_marcado" class="m_correto_marcado m_correto_marcado${dados.id}">
+                        </label>
+                        <div class="m_t_card_dados">
+                            <p>#${String(dados.id).padStart(3, "0")}</p>
+                            <h1>${dados.name}</h1>
+                            <div class="m_poke_tipo">
+                                ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                            </div>
+                        </div>
+                        <div class="m_t_card_img m_t_${dados.id}">
+                            <img src="${img}" alt="${dados.name}">
+                        </div>
+                    </div>
+                    <div class="m_t_card_lixo">
+                        <img src="img/lixeira.svg" alt="lixeira" onclick="m_excluir_time(${dados.id})">
+                    </div>
+                </div>
+
+            `;
+            let poke_cor = document.querySelector(`.m_t_${dados.id}`);
+            poke_cor.style.backgroundColor = `var(--${tipos[0]})`;
+        }
+        catch(error){
+            alert("Erro ao carregar os Times");
+        }
+    }
+}
+function m_troca_correto(event, id){
+    event.stopPropagation()
+    if(document.querySelector(`.m_correto_desmarcado${id}`).style.display != "none"){
+        document.querySelector(`.m_correto_desmarcado${id}`).style.display = "none";
+        document.querySelector(`.m_correto_marcado${id}`).style.display = "block";
+    }
+    else{
+        document.querySelector(`.m_correto_desmarcado${id}`).style.display = "block";
+        document.querySelector(`.m_correto_marcado${id}`).style.display = "none";        
+    }
+
+}
+function m_excluir_time(id){
+    let remover = JSON.parse(localStorage.getItem("teams"));
+    remover = remover.filter(item => item !== id);
+    localStorage.setItem("teams", JSON.stringify(remover));
+    location.reload();
+}
+function m_excluir_time_tudo(){
+    m_t_marcados();
+    if(m_vetor_marcados.length === 0){
+        if(confirm("Deseja excluir todos os pokemons da lista de times!!")){
+            localStorage.removeItem("teams");
+            location.reload();
+        }
+        else{
+            return;
+        }
+    }
+    else{
+        if(confirm("Deseja excluir todos os pokemons selecionados!!")){
+            for(let i = 0; i < m_vetor_marcados.length; i++){
+                let remover = JSON.parse(localStorage.getItem("teams"));
+                remover = remover.filter(item => item !== m_vetor_marcados[i]);
+                localStorage.setItem("teams", JSON.stringify(remover));
+            }
+            m_vetor_marcados = [];
+            location.reload();
+        }
+        else{
+            return;
+        }
+    }
+}
+
+function getTeams() {
+    return JSON.parse(localStorage.getItem('teams') || '[]');
+}
 m_jogo_poke();  
+m_carrosel(1);
 m_index_poke(m_calculo_pag());
 m_busca_id();
+
+document.addEventListener("mouseenter", (card) => {
+    let principal = document.querySelector(".m_c_3");
+    if (card.target.classList.contains("m_c_card") && !card.target.classList.contains("m_c_3")) {
+        card.target.style.transform = "scale(1.15)"
+        card.target.style.filter = "blur(0)"
+        card.target.style.zIndex = "996"
+        principal.style.transform = "scale(1.08)"
+        principal.style.filter = "blur(2px)"
+    }
+}, true);
+
+document.addEventListener("mouseleave", (card) => {
+    let principal = document.querySelector(".m_c_3");
+    if (card.target.classList.contains("m_c_card")) {
+        card.target.style.background = "";
+        card.target.style.transform = ""
+        card.target.style.filter = ""
+        card.target.style.zIndex = ""
+        principal.style.transform = ""
+        principal.style.filter = ""
+    }
+}, true);
+
 
 // -----login-----
 function m_login(){
@@ -684,5 +903,60 @@ function m_cadastro(){
     window.location.href = "login.html";
 
 }
-// Para acessar a página de favoritos, adicione um botão no HTML, por exemplo:
-// <button onclick="m_show_favorites()">Meus Favoritos</button>
+// add favoritos na pagina pokemon
+function m_add_favoritos(n){
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+}
+
+window.addEventListener("scroll", function() { //fecha o menu lateral ao rolar a pagina
+    let menu = document.querySelector(".m_menu_lateral");
+    if (m_cont_menu == 1) {
+        menu.style.right = "-100%";
+        m_cont_menu = 0;
+    }
+});
+
+function m_lupa_header(){
+    let barra = document.querySelector(".m_h_lupa");
+    if(m_h_lupa == 0){
+        m_h_lupa = 1;
+        barra.style.opacity = "1";
+        barra.style.pointerEvents = "auto";
+    }
+    else{
+        m_h_lupa = 0;
+        barra.style.opacity = "0";
+        barra.style.pointerEvents = "none";
+    }
+}
+function m_lupa(){
+    let pesquisa = document.getElementById("m_pesquisa_lupa").value;
+    m_enviar_dados(pesquisa);
+}
+
+// ---------------times------------------
+if (location.pathname === "/times.html") {
+    m_times();
+}
+document.addEventListener("mouseenter", (card) => {
+    if (card.target.classList.contains("m_t_card")) {
+        let lixo = card.target.querySelector(".m_t_card_lixo");
+        lixo.style.marginLeft = "-5rem";
+    }
+}, true);
+
+document.addEventListener("mouseleave", (card) => {
+    if (card.target.classList.contains("m_t_card")) {
+        let lixo = card.target.querySelector(".m_t_card_lixo");
+        lixo.style.marginLeft = "-20rem";
+    }
+}, true);
+
+// ---------------------------marcar pokemon dos times--------------------------
+
+function m_t_marcados(){
+    let pokemons = document.querySelectorAll(".m_t_marcado:checked");
+    pokemons.forEach(p => {
+        m_vetor_marcados.push(Number(p.value));
+    });
+}

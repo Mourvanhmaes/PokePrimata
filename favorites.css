@@ -119,7 +119,45 @@ header{
 .m_header_menu{
     width: 1.5rem;
 }
+.m_header_lupa{
+    width: 1rem;
+    cursor: pointer;
+}
+.m_h_lupa{
+    position: absolute;
+    opacity: 0;
+    top: 1.3rem;
+    right: 8rem;
+    width: 20rem;
+    display: flex;
+    pointer-events: none;
+    border: 1px solid rgb(195, 195, 195);
+    border-radius: 0.4rem;
+    transition: 0.5s;
+    transform: translateY(-10px);
+}
 
+#m_pesquisa_lupa{
+    height: 1rem;
+    width: 40rem;
+    background-color: #02020C;
+    border: none;
+    margin: 0.1rem;
+    color: var(--branco);
+}
+#m_pesquisa_lupa:focus{
+    outline: none;
+    border: none;
+}
+.m_h_lupa button{
+    background-color: #2E798D;
+    border: none;
+    border-top-right-radius: 0.4rem;
+    border-bottom-right-radius: 0.4rem;
+    font-family: var(--mont);
+    font-weight: bolder;
+    cursor: pointer;
+}
 /* ==========menu lateral========= */
 .m_menu_lateral{
     position: fixed;

@@ -10,26 +10,30 @@
 </head>
 
 <body class="a_body">
-<header class="a_header">
-       <div class="m_header_home">
-           <a href="index.html">
-               <img src="img/logo_pokebola.svg" alt="logo">
-               <h1>POKEPRIMATA</h1>
-           </a>
-       </div>
-       <nav class="m_header_nav">
-           <a href="index.html" class="m_header_a">Inicio</a>
-           <a href="times.html" class="m_header_a">Times</a>
-           <a href="pokemon.html" class="m_header_a">Pokémon</a>
-           <a href="favorites.html" class="m_header_a">Favoritos</a>
-           <a href="jogo.html" class="m_header_a">Jogos</a>
-       </nav>
-       <div class="m_header_direito">
-           <a href="#"><img src="img/lupa.svg" alt="lupa" class="m_header_lupa"></a>
-           <a href="login.html" class="m_header_botao_login">LOGIN</a>
-           <img src="img/menu.svg" alt="menu" class="m_header_menu" onclick="m_menu_lateral()">
-       </div>
-   </header>
+    <header class="a_header">
+        <div class="m_header_home">
+            <a href="index.html">
+                <img src="img/logo_pokebola.svg" alt="logo">
+                <h1>POKEPRIMATA</h1>
+            </a>
+        </div>
+        <nav class="m_header_nav">
+            <a href="index.html" class="m_header_a">Inicio</a>
+            <a href="times.html" class="m_header_a">Times</a>
+            <a href="pokemon.html" class="m_header_a">Pokémon</a>
+            <a href="favorites.html" class="m_header_a">Favoritos</a>
+            <a href="jogo.html" class="m_header_a">Jogos</a>
+        </nav>
+        <div class="m_header_direito">
+            <div class="m_h_lupa">
+                <input type="text" placeholder="Buscar Pokémon por nome, numero...." id="m_pesquisa_lupa">
+                <button onclick="m_lupa()">Buscar</button>
+            </div>
+            <img src="img/lupa.svg" alt="lupa" class="m_header_lupa" onclick="m_lupa_header()">
+            <a href="login.html" class="m_header_botao_login">LOGIN</a>
+            <img src="img/menu.svg" alt="menu" class="m_header_menu" onclick="m_menu_lateral()">
+        </div>
+    </header>
     <div class="m_menu_lateral">
         <nav>
             <div class="m_lat_nav">
