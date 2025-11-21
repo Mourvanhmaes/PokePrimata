@@ -8,6 +8,7 @@ let m_cont_menu = 0;
 let m_h_lupa = 0;
 let m_posicao_carrousel = 0;
 let m_c_vetor = [];
+let m_vetor_marcados = [];
 function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
 }
@@ -751,7 +752,11 @@ async function m_times(){
             cards.innerHTML += `
                 <div class="m_t_card">
                     <div class="m_t_card_principal" onclick="m_enviar_dados(${dados.id})">
-                        <img src="img/correto_desmarcado.svg" alt="correto_desmarcado" class="m_t_correto">
+                        <input type="checkbox" name="marcar" id="m_t_marcado${dados.id}" class="m_t_marcado" value="${dados.id}" onclick="event.stopPropagation()">
+                        <label for="m_t_marcado${dados.id}" class="m_t_correto" onclick="m_troca_correto(event, ${dados.id})">
+                            <img src="img/correto_desmarcado.svg" alt="correto_desmarcado" class=" m_correto_desmarcado m_correto_desmarcado${dados.id}">
+                            <img src="img/correto_marcado.svg" alt="correto_marcado" class="m_correto_marcado m_correto_marcado${dados.id}">
+                        </label>
                         <div class="m_t_card_dados">
                             <p>#${String(dados.id).padStart(3, "0")}</p>
                             <h1>${dados.name}</h1>
@@ -777,6 +782,18 @@ async function m_times(){
         }
     }
 }
+function m_troca_correto(event, id){
+    event.stopPropagation()
+    if(document.querySelector(`.m_correto_desmarcado${id}`).style.display != "none"){
+        document.querySelector(`.m_correto_desmarcado${id}`).style.display = "none";
+        document.querySelector(`.m_correto_marcado${id}`).style.display = "block";
+    }
+    else{
+        document.querySelector(`.m_correto_desmarcado${id}`).style.display = "block";
+        document.querySelector(`.m_correto_marcado${id}`).style.display = "none";        
+    }
+
+}
 function m_excluir_time(id){
     let remover = JSON.parse(localStorage.getItem("teams"));
     remover = remover.filter(item => item !== id);
@@ -784,12 +801,29 @@ function m_excluir_time(id){
     location.reload();
 }
 function m_excluir_time_tudo(){
-    if(confirm("Deseja excluir todos os pokemons da lista de times!!")){
-        localStorage.removeItem("teams");
-        location.reload();
+    m_t_marcados();
+    if(m_vetor_marcados.length === 0){
+        if(confirm("Deseja excluir todos os pokemons da lista de times!!")){
+            localStorage.removeItem("teams");
+            location.reload();
+        }
+        else{
+            return;
+        }
     }
     else{
-        return;
+        if(confirm("Deseja excluir todos os pokemons selecionados!!")){
+            for(let i = 0; i < m_vetor_marcados.length; i++){
+                let remover = JSON.parse(localStorage.getItem("teams"));
+                remover = remover.filter(item => item !== m_vetor_marcados[i]);
+                localStorage.setItem("teams", JSON.stringify(remover));
+            }
+            m_vetor_marcados = [];
+            location.reload();
+        }
+        else{
+            return;
+        }
     }
 }
 
@@ -917,3 +951,13 @@ document.addEventListener("mouseleave", (card) => {
         lixo.style.marginLeft = "-20rem";
     }
 }, true);
+
+// ---------------------------marcar pokemon dos times--------------------------
+
+function m_t_marcados(){
+    m_vetor_marcados = [];
+    let pokemons = document.querySelectorAll(".m_t_marcado:checked");
+    pokemons.forEach(p => {
+        m_vetor_marcados.push(Number(p.value));
+    });
+}

@@ -9,7 +9,7 @@
 </head>
 <body>
     
-   <header>
+    <header>
         <div class="m_header_home">
             <a href="index.html">
                 <img src="img/logo_pokebola.svg" alt="logo">
@@ -24,7 +24,11 @@
             <a href="jogo.html" class="m_header_a">Jogos</a>
         </nav>
         <div class="m_header_direito">
-            <a href="#"><img src="img/lupa.svg" alt="lupa" class="m_header_lupa"></a>
+            <div class="m_h_lupa">
+                <input type="text" placeholder="Buscar Pokémon por nome, numero...." id="m_pesquisa_lupa">
+                <button onclick="m_lupa()">Buscar</button>
+            </div>
+            <img src="img/lupa.svg" alt="lupa" class="m_header_lupa" onclick="m_lupa_header()">
             <a href="login.html" class="m_header_botao_login">LOGIN</a>
             <img src="img/menu.svg" alt="menu" class="m_header_menu" onclick="m_menu_lateral()">
         </div>
@@ -82,7 +86,6 @@
             </a>
         </div>
         <div class="m_lista_times">
-
         </div>
     </main>
     <script src="script.js"></script>
