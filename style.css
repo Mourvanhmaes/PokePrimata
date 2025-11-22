@@ -1012,173 +1012,6 @@ footer{
     color: #ffffff;
 }
 
-/*-------------------------------responsivo------------------------------------ */
-/*-------------------------------responsivo------------------------------------ */
-/*-------------------------------responsivo------------------------------------ */
-@media (max-width: 800px) {
-    *{
-    overflow-x: hidden;
-    }
-    .m_header_nav{
-        display: none;
-    }
-    .m_barra_pesq{
-        width: 90%;
-    }
-    .m_filtros{
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        gap: 0.3rem;
-    }
-    .m_f_principal{
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        padding-left: 0;
-        font-size: 170%;
-        padding: 0.5rem;
-    }
-    .m_f_titulo{
-        align-items: center;
-    }
-    .m_f_logo img{
-        width: 5rem;
-    }
-    .m_f_nav_t{
-        padding: 0;
-    }
-    .m_f_segundario{
-        padding: 0.5rem;
-    }
-    .m_cards{
-        padding: 1rem;
-    }
-    .m_card{
-        width: 60%;
-    }
-    .m_card img{
-        width: 10rem;
-    }
-    .m_barra_pesq button{
-        width: 40%;
-    }
-    .a_main{
-        padding: 1rem;
-        padding-top: 5rem;
-        padding-bottom: 10rem;
-    }
-    .m_poke_pokemon{
-        justify-content: center;
-        text-align: center;
-    }
-    .m_poke_pokemon .m_poke_tipo{
-        justify-content: center;
-    }
-    .m_poke_pokemon_img{
-        display: flex;
-        justify-content: center;
-    }
-    .m_poke_medidas{
-        align-items: center;
-    }
-    .m_poke_pokemon_img img{
-        width: 20rem;
-    }
-    .m_poke_nome{
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        font-size: 80%;
-    }
-    .m_poke_fraq .m_poke_tipo{
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    .m_poke_habilit{
-        overflow-x: hidden;
-    }
-    .m_poke_master{
-        display: none;
-    }
-    .m_poke_extras{
-        flex-wrap: wrap;
-    }
-    .m_poke_card img{
-        width: 6rem;
-    }
-    .m_poke_card{
-        font-size: 80%;
-    }
-    .m_poke_evo_titulo{
-        text-align: center;
-    }
-    .m_poke_evo_quadrado{
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-        width: 90%;
-        margin: auto;
-    }
-    .m_poke_evo_card img{
-        width: 10rem;
-    }
-    #m_evo_baixo{
-        display: block;
-        width: 5rem;
-    }
-    #m_evo_seta{
-        display: none;
-    }
-    .m_poke_setas{
-        display: none;
-    }
-    .m_poke_habilit{
-        display: none;
-    }
-    .m_pag_poke{
-        padding: 0.5rem;
-        padding-top: 1rem;
-    }
-    .m_poke_dados{
-        text-align: center;
-        padding-top: 0;
-    }
-    .m_poke_dados p{
-        font-size: 110%;
-        width: 100%;
-    }
-    /* jogo */
-    .m_jogo_principal{
-        width: 100%;
-        flex-wrap: wrap;
-        gap: 2rem;
-    }
-    .m_jogo{
-        padding: 2rem;
-    }
-    .m_jogo_todos{
-        padding: 0.5rem;
-    }
-    .m_jogo_poke{
-        box-shadow: none;
-    }
-    .m_jogo_pontos{
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-    .m_jogo_alert{
-        width: 80%;
-        margin: 0;
-        left: 6.5%;
-    }
-    .m_alert_button{
-        width: 100%;
-    }
-}
-
 /* ==========menu lateral========= */
 .m_menu_lateral{
     position: fixed;
@@ -1511,7 +1344,7 @@ footer{
     border-radius: 2rem;
     padding-top: 0;
     padding-bottom: 0;
-    z-index: 999;
+    z-index: 998;
     cursor: pointer;
 }
 .m_t_card_dados{
@@ -1564,12 +1397,6 @@ footer{
 .m_times_titulo h4{
     font-family: var(--mont);
 }
-.no-teams{
-    padding-top: 10rem;
-    font-size: 150%;
-    color: white;
-    font-family: var(--mont);
-}
 .m_t_atalhos{
     display: flex;
     justify-content: center;
@@ -1606,4 +1433,210 @@ footer{
     display: none;
     position: absolute;
     pointer-events: none;
+}
+
+
+/*-------------------------------responsivo------------------------------------ */
+/*-------------------------------responsivo------------------------------------ */
+/*-------------------------------responsivo------------------------------------ */
+@media (max-width: 800px) {
+    *{
+    overflow-x: hidden;
+    }
+    .m_header_nav{
+        display: none;
+    }
+    .m_barra_pesq{
+        width: 90%;
+    }
+    .m_filtros{
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        gap: 0.3rem;
+    }
+    .m_f_principal{
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding-left: 0;
+        font-size: 170%;
+        padding: 0.5rem;
+    }
+    .m_f_titulo{
+        align-items: center;
+    }
+    .m_f_logo img{
+        width: 5rem;
+    }
+    .m_f_nav_t{
+        padding: 0;
+    }
+    .m_f_segundario{
+        padding: 0.5rem;
+    }
+    .m_cards{
+        padding: 1rem;
+    }
+    .m_card{
+        width: 60%;
+    }
+    .m_card img{
+        width: 10rem;
+    }
+    .m_barra_pesq button{
+        width: 40%;
+    }
+    .a_main{
+        padding: 1rem;
+        padding-top: 5rem;
+        padding-bottom: 10rem;
+    }
+    .m_poke_pokemon{
+        justify-content: center;
+        text-align: center;
+    }
+    .m_poke_pokemon .m_poke_tipo{
+        justify-content: center;
+    }
+    .m_poke_pokemon_img{
+        display: flex;
+        justify-content: center;
+    }
+    .m_poke_medidas{
+        align-items: center;
+    }
+    .m_poke_pokemon_img img{
+        width: 20rem;
+    }
+    .m_poke_nome{
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        font-size: 80%;
+    }
+    .m_poke_fraq .m_poke_tipo{
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .m_poke_habilit{
+        overflow-x: hidden;
+    }
+    .m_poke_master{
+        display: none;
+    }
+    .m_poke_extras{
+        flex-wrap: wrap;
+    }
+    .m_poke_card img{
+        width: 6rem;
+    }
+    .m_poke_card{
+        font-size: 80%;
+    }
+    .m_poke_evo_titulo{
+        text-align: center;
+    }
+    .m_poke_evo_quadrado{
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        width: 90%;
+        margin: auto;
+    }
+    .m_poke_evo_card img{
+        width: 10rem;
+    }
+    #m_evo_baixo{
+        display: block;
+        width: 5rem;
+    }
+    #m_evo_seta{
+        display: none;
+    }
+    .m_poke_setas{
+        display: none;
+    }
+    .m_poke_habilit{
+        display: none;
+    }
+    .m_pag_poke{
+        padding: 0.5rem;
+        padding-top: 1rem;
+    }
+    .m_poke_dados{
+        text-align: center;
+        padding-top: 0;
+    }
+    .m_poke_dados p{
+        font-size: 110%;
+        width: 100%;
+    }
+    /* jogo */
+    .m_jogo_principal{
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 2rem;
+    }
+    .m_jogo{
+        padding: 2rem;
+    }
+    .m_jogo_todos{
+        padding: 0.5rem;
+    }
+    .m_jogo_poke{
+        box-shadow: none;
+    }
+    .m_jogo_pontos{
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .m_jogo_alert{
+        width: 80%;
+        margin: 0;
+        left: 6.5%;
+    }
+    .m_alert_button{
+        width: 100%;
+    }
+    .m_c_cards{
+        height: 30rem;
+    }
+    .m_i_texto{
+        width: 100%;
+    }
+    .m_i_logo p{
+        width: 100%;
+    }
+    .m_i_logo img{
+        width: 80%;
+    }
+    .m_t_card_img{
+        width: 30%;
+        height: 100%;
+    }
+    .m_t_card_img img{
+        width: 100%;
+    }
+    .m_t_card_dados{
+        font-size: 70%;
+    }
+    .m_t_card_principal{
+        gap: 30%;
+        width: 92%;
+        margin-left: 1%;
+        height: 11rem;
+        
+    }
+    .m_lista_times{
+        width: 99%;
+    }
+    .m_t_card_lixo{
+        display: none;
+    }
+    .m_header_lupa{
+        display: none;
+    }
 }
