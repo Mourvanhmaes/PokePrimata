@@ -9,6 +9,10 @@ let m_h_lupa = 0;
 let m_posicao_carrousel = 0;
 let m_c_vetor = [];
 let m_vetor_marcados = [];
+let m_j_musica = 1;
+let musica = new Audio("audio/open.mp3");
+musica.loop = true;
+musica.volume = 0.5;
 function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
 }
@@ -188,7 +192,7 @@ async function m_busca_pokemon(n){
                     ${habilidades.map(h => `<p>${h}</p>`).join(" ")}
                 </div>
                 <div class="m_poke_estrelas">
-                    <div class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
+                    <div title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
                     <div class="m_star_btn" title="Adicionar ao Time" onclick="toggleTeam(${dados.id}, this); event.stopPropagation();" style="color: ${starColor};">${star}</div>
                 </div>
             </div>
@@ -619,8 +623,8 @@ async function m_filtrar(n){
 
 }
 function m_tocar_quem(){
-    let musica = new Audio('audio/quem_poke.mp3');
-    musica.play();
+    let m_quem = new Audio('audio/quem_poke.mp3');
+    m_quem.play();
 }
 async function m_pesquisa_poke(){
     let m_pesq = document.getElementById("m_pesquisa_poke").value;
@@ -915,6 +919,24 @@ function m_t_marcados(){
         m_vetor_marcados.push(Number(p.value));
     });
 }
+function m_tocar_musica(){
+    if(m_j_musica == 1){
+        musica.play();
+        m_j_musica = 0;
+        document.querySelector(".m_j_titulo").innerHTML = `
+            <h1 onclick="m_tocar_quem()">Quem é esse Pokemon?</h1>
+            <img src="img/volume-up.svg" alt="volume-up" onclick="m_tocar_musica()">
+        `;
+    }
+    else if(m_j_musica == 0){
+        musica.pause();
+        m_j_musica = 1;
+        document.querySelector(".m_j_titulo").innerHTML = `
+            <h1 onclick="m_tocar_quem()">Quem é esse Pokemon?</h1>
+            <img src="img/volume-mute.svg" alt="volume-mute" onclick="m_tocar_musica()">
+        `;
+    }
+}
 
 // rodar funções]
 if (location.pathname.includes("times.html")) {
@@ -965,5 +987,6 @@ if (location.pathname.includes("pokemon.html")) {
     m_busca_id();
 }
 if (location.pathname.includes("jogo.html")) {
-    m_jogo_poke();  
+    m_jogo_poke();
+    m_tocar_musica();
 }

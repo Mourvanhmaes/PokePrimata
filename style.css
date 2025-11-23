@@ -70,7 +70,8 @@ header{
     font-family: var(--jersey);
     text-decoration-thickness: 0.5px;
     text-underline-offset: 3px;
-    font-size: 110%;
+    font-size: 120%;
+    letter-spacing: 0.5px;
 }
 .m_header_a:hover{
     color: var(--laranja_contraste);
@@ -730,6 +731,18 @@ header{
     font-size: 180%;
     filter: brightness(99);
 }
+.m_j_titulo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+.m_j_titulo img{
+    width: 3rem;
+    filter: invert(100);
+    cursor: pointer;
+}
 /*------------------------------------alert------------------------- */
 .m_jogo_alert{
     position: absolute;
@@ -1299,6 +1312,7 @@ footer{
         rgba(0, 0, 0, 0.4)
     ),
     url("img/fundo_index.svg");
+    border-bottom: double var(--azul-botao) 4px;
 }
 /* ----------------------------------------times------------------------------------ */
 .t_main{
@@ -1434,7 +1448,208 @@ footer{
     position: absolute;
     pointer-events: none;
 }
+/*----------------------------favoritos----------------- */
+/* Empurra o conteúdo por causa do header fixo */
+.f_main { 
+    padding-top: clamp(60px, 10vw, 80px);
+    background-color: #06060b;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
 
+/* =========================
+   CSS específico usado no HTML de Favoritos
+   ========================= */
+.fav-hero {
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 5vw, 28px) clamp(1rem, 5vw, 16px) clamp(0.5rem, 3vw, 8px);
+  text-align: center;
+}
+.fav-title {
+  color: #eaf2ff;
+  font-family: var(--jersey);
+  font-size: clamp(20px, 6vw, 40px);
+  letter-spacing: .02em;
+  margin: 0;
+}
+.fav-sub {
+  color: #c7d7f0;
+  opacity: .9;
+  margin-top: 0.5rem;
+  font-size: clamp(12px, 3vw, 16px);
+}
+
+.fav-controls {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin: clamp(0.5rem, 3vw, 12px) auto clamp(1rem, 4vw, 18px);
+  width: min(1100px, 92vw);
+  flex-wrap: wrap;
+}
+.fav-clear {
+  background: #ef4444;
+  border: 0;
+  color: #fff;
+  padding: clamp(0.5rem, 2vw, 8px) clamp(0.8rem, 3vw, 12px);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--jersey);
+  font-size: clamp(10px, 2.5vw, 14px);
+  transition: filter 0.3s;
+}
+.fav-clear:hover { filter: brightness(1.05); }
+.back-btn {
+  background: var(--azul-botao);
+  border: 0;
+  color: #fff;
+  padding: clamp(0.5rem, 2vw, 8px) clamp(0.8rem, 3vw, 12px);
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--jersey);
+  font-size: clamp(10px, 2.5vw, 14px);
+  transition: filter 0.3s;
+}
+.back-btn:hover { filter: brightness(1.05); }
+
+.fav-list {
+  width: min(1100px, 92vw);
+  margin: clamp(0.5rem, 2vw, 6px) auto clamp(2rem, 8vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 3vw, 14px);
+}
+
+/* ===== Centralizar ID (#006) e Nome (CHARIZARD) no card ===== */
+.fav-card{
+  display: grid;
+  grid-template-columns: 1fr clamp(200px, 30vw, 340px);  /* texto | imagem */
+  align-items: center;                /* centraliza verticalmente as colunas */
+  border-radius: clamp(1rem, 5vw, 28px);
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fav-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* bloco de informações à esquerda */
+.fav-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;            /* centraliza verticalmente o conteúdo */
+  gap: 0.5rem;
+  padding: clamp(1rem, 4vw, 28px);
+  min-height: clamp(120px, 20vw, 160px);                  /* garante área para o centramento */
+}
+
+.fav-id {
+  color: #c7d7f0;
+  font-family: var(--jersey);
+  font-size: clamp(10px, 3vw, 14px);
+  letter-spacing: .04em;
+}
+
+.fav-name {
+  color: #eaf2ff;
+  font-family: var(--jersey);
+  font-size: clamp(18px, 5vw, 32px);
+  margin: 0.2rem 0 0.5rem;
+  line-height: .95;
+  letter-spacing: .02em;
+}
+
+.fav-img {
+  width: 100%;
+  height: clamp(120px, 20vw, 160px);
+  object-fit: contain;
+  padding: 1rem;
+}
+
+/* ajustes finos do ID e do nome */
+.fav-info .fav-id{ font-size: clamp(10px, 3vw, 14px); letter-spacing: .04em; }
+.fav-name{ margin: 0.2rem 0 0.5rem; line-height: .95; }
+
+/* centraliza também no mobile e alinha textos */
+@media (max-width: 720px){
+  .fav-card{ 
+    grid-template-columns: 1fr; 
+    grid-template-rows: auto 1fr;
+  }
+  .fav-info{
+    align-items: center;              /* centro horizontal */
+    text-align: center;
+    order: 2;
+  }
+  .fav-img {
+    order: 1;
+  }
+}
+/* Botão coração */
+.m_heart_btn {
+  border-radius: 50%;
+  width: clamp(20px, 5vw, 30px);
+  height: clamp(20px, 5vw, 30px);
+  border: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  font-size: clamp(12px, 3vw, 16px);
+  cursor: pointer;
+  position: absolute;
+  top: clamp(0.5rem, 2vw, 10px);
+  right: clamp(0.5rem, 2vw, 10px);
+  transition: background-color 0.3s, transform 0.3s;
+  z-index: 1;
+}
+
+.m_heart_btn:hover {
+  background-color: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+}
+
+/* Mensagem sem favoritos */
+.no-favorites {
+  text-align: center;
+  font-size: clamp(14px, 4vw, 18px);
+  color: #c7d7f0;
+  padding: clamp(2rem, 8vw, 40px);
+  width: 100%;
+  font-family: var(--jersey);
+  letter-spacing: .02em;
+}
+
+.no-favorites a {
+  color: var(--azul-botao);
+  text-decoration: none;
+}
+
+.no-favorites a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 5px var(--azul-botao);
+}
+
+/* Responsividade adicional para telas muito pequenas */
+@media (max-width: 480px) {
+    .fav-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .fav-clear, .back-btn {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto;
+    }
+    .m_header_home h1 {
+        font-size: clamp(10px, 4vw, 14px);
+    }
+}
 
 /*-------------------------------responsivo------------------------------------ */
 /*-------------------------------responsivo------------------------------------ */
