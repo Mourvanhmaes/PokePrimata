@@ -743,7 +743,10 @@ async function m_times(){
     let time = getTeams();
     let cards = document.querySelector(".m_lista_times");
     if (time.length === 0) {
-        cards.innerHTML = '<p class="no-teams">Nenhum Pokémon adicionado ao time ainda.</p>';
+        cards.innerHTML = `
+            <p class="m_t_vazio">Nenhum Pokémon adicionado ao time ainda.</p>
+            <div class="m_t_carregar"></div>
+            `;
         return;
     }
     for(let id of time){

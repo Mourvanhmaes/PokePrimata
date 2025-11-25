@@ -1448,6 +1448,28 @@ footer{
     position: absolute;
     pointer-events: none;
 }
+.m_t_vazio{
+    padding-top: 2rem;
+    color: white;
+    font-size: 120%;
+    font-family: var(--mont);
+}
+.m_t_carregar{
+    margin-top: 2rem;
+    width: 4rem;
+    height: 4rem;
+    border: 6px solid white;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: girar 0.9s linear infinite;
+}
+
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /*----------------------------favoritos----------------- */
 /* Empurra o conteúdo por causa do header fixo */
 .f_main { 
@@ -1853,5 +1875,9 @@ footer{
     }
     .m_header_lupa{
         display: none;
+    }
+    .m_num_pag{
+        padding-left: 0;
+        justify-content: center;
     }
 }
