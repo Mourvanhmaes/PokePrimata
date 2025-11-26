@@ -431,7 +431,6 @@ header{
 }
 /* ---------------------------------index--------------------------- */
 .m_index{
-    background-color: #0A0A11;
     min-height: 100vh;
     color: var(--branco);
     font-family: var(--mont);
@@ -568,6 +567,19 @@ header{
 .m_barra_pesq button:hover{
     background-color: #14CDFF;
     color: var(--branco);
+}
+.m_i_header{
+    background-color: rgba(0, 0, 0, 0);
+}
+.m_i_body{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url("img/fundo_home.svg");
+    background-size: 20% cover;
+    background-position: center 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+.m_i_lista{
+    background-color: #0A0A11;
 }
 /* ------------------jogo------------------ */
 .m_jogo{
@@ -1307,11 +1319,7 @@ footer{
     font-family: var(--mont);
 }
 .m_i_topo {
-    background-image: linear-gradient(
-        rgba(0, 0, 0, 0.4),
-        rgba(0, 0, 0, 0.4)
-    ),
-    url("img/fundo_index.svg");
+    background-color: transparent;
     border-bottom: double var(--azul-botao) 4px;
 }
 /* ----------------------------------------times------------------------------------ */
@@ -1363,6 +1371,10 @@ footer{
 }
 .m_t_card_dados{
     font-family: var(--mont);
+}
+.m_t_card_dados h1{
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .m_t_card_dados .m_poke_tipo h4{
     font-size: 110%;
