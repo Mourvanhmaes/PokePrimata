@@ -9,6 +9,11 @@ let m_h_lupa = 0;
 let m_posicao_carrousel = 0;
 let m_c_vetor = [];
 let m_vetor_marcados = [];
+let m_j_musica = 1;
+let musica = new Audio("audio/open.mp3");
+musica.loop = true;
+musica.volume = 0.5;
+
 function getFavorites() {
     return JSON.parse(localStorage.getItem('favorites') || '[]');
 }
@@ -30,6 +35,29 @@ function toggleTeam(id, btn) {
     localStorage.setItem('teams', JSON.stringify(teams));
 }
 
+function toggleFavorite(id, btn) {
+    let favorites = getFavorites();
+    let isFav = favorites.includes(id);
+    if (isFav) {
+        favorites = favorites.filter(f => f !== id);
+        btn.innerHTML = '♥';
+        btn.style.color = 'red';
+    } else {
+        favorites.push(id);
+        btn.innerHTML = '♥';
+        btn.style.color = 'red';
+    }
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    // Remove o card imediatamente se removido de favoritos
+    if (!isFav) {
+        // Se foi adicionado, não remove
+    } else {
+        btn.closest('.fav-card').remove();
+        if (document.querySelectorAll('.fav-card').length === 0) {
+            document.getElementById('favorites-container').innerHTML = '<p class="no-favorites">Nenhum Pokémon favorito adicionado ainda. <a href="index.html">Adicione alguns!</a></p>';
+        }
+    }
+}
 function m_toggle_favorite(id, btn) {
     let favorites = getFavorites();
     let isFav = favorites.includes(id);
@@ -188,7 +216,7 @@ async function m_busca_pokemon(n){
                     ${habilidades.map(h => `<p>${h}</p>`).join(" ")}
                 </div>
                 <div class="m_poke_estrelas">
-                    <div class="m_heart_btn" title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
+                    <div title="Favoritar Pokémon" onclick="m_toggle_favorite(${dados.id}, this); event.stopPropagation();" style="color: ${heartColor};">${heart}</div>
                     <div class="m_star_btn" title="Adicionar ao Time" onclick="toggleTeam(${dados.id}, this); event.stopPropagation();" style="color: ${starColor};">${star}</div>
                 </div>
             </div>
@@ -619,8 +647,8 @@ async function m_filtrar(n){
 
 }
 function m_tocar_quem(){
-    let musica = new Audio('audio/quem_poke.mp3');
-    musica.play();
+    let m_quem = new Audio('audio/quem_poke.mp3');
+    m_quem.play();
 }
 async function m_pesquisa_poke(){
     let m_pesq = document.getElementById("m_pesquisa_poke").value;
@@ -734,13 +762,111 @@ function m_girar_vetor(){
     m_c_vetor.push(primeiro);        
     m_carrosel(2);
 }
-setInterval(m_girar_vetor, 3000);
 
+function clearFavorites() {
+    if (confirm('Tem certeza que deseja limpar todos os favoritos?')) {
+        localStorage.removeItem('favorites');
+        loadFavorites();
+    }
+}
+
+async function loadFavorites() {
+    let favorites = getFavorites();
+    let cards = document.querySelector(".m_lista_favoritos");
+    cardHTML = "";
+    if (favorites.length === 0) {
+        cards.innerHTML = `
+            <p class="m_t_vazio">Nenhum Pokémon adicionado ao favoritos ainda.</p>
+            <div class="m_t_carregar"></div>
+         `;
+        return;
+    }
+    for (let id of favorites) {
+        try {
+            let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+            if (!response.ok) throw new Error('Pokémon não encontrado');
+            let dados = await response.json();
+            let img = dados.sprites.other['official-artwork'].front_default || dados.sprites.front_default;
+            let tipos = dados.types.map(t => t.type.name);
+            let teams = getTeams();
+            let isTeam = teams.includes(dados.id);
+            let star = isTeam ? '★' : '☆';
+            let starColor = isTeam ? 'gold' : 'gray';
+            let cardHTML = `
+                <div class="m_f_card">
+                    <div class="m_t_card_principal" onclick="m_enviar_dados(${dados.id})">
+                        <input type="checkbox" name="marcar" id="m_t_marcado${dados.id}" class="m_t_marcado" value="${dados.id}" onclick="event.stopPropagation()">
+                        <label for="m_t_marcado${dados.id}" class="m_t_correto" onclick="m_troca_correto(event, ${dados.id})">
+                            <img src="img/correto_desmarcado.svg" alt="correto_desmarcado" class=" m_correto_desmarcado m_correto_desmarcado${dados.id}">
+                            <img src="img/correto_marcado.svg" alt="correto_marcado" class="m_correto_marcado m_correto_marcado${dados.id}">
+                        </label>
+                        <div class="m_t_card_dados">
+                            <p>#${String(dados.id).padStart(3, "0")}</p>
+                            <h1>${dados.name}</h1>
+                            <div class="m_poke_tipo">
+                                ${tipos.map(t => `<h4 class="m_${t}">${t}</h4>`).join('')}
+                            </div>
+                        </div>
+                        <div class="m_t_card_img m_t_${dados.id}">
+                            <img src="${img}" alt="${dados.name}">
+                            <div class="m_star_btn" title="Adicionar ao Time" onclick="toggleTeam(${dados.id}, this); event.stopPropagation();" style="color: ${starColor};">${star}</div>
+                        </div>
+                    </div>
+                    <div class="m_t_card_lixo">
+                        <img src="img/lixeira.svg" alt="lixeira" onclick="m_excluir_favoritos(${dados.id})">
+                    </div>
+                </div>
+
+            `;
+            cards.innerHTML += cardHTML;
+            let poke_cor = document.querySelector(`.m_t_${dados.id}`);
+            poke_cor.style.backgroundColor = `var(--${tipos[0]})`;
+        } catch (error) {
+            console.error('Erro ao carregar Pokémon:', id, error);
+            cards.innerHTML += `<p class="m_t_vazio">Erro ao carregar Pokémon #${id}</p> <div class="m_t_carregar"></div>`;
+        }
+    }
+}
+function m_excluir_favoritos(id){
+    let remover = JSON.parse(localStorage.getItem("favorites"));
+    remover = remover.filter(item => item !== id);
+    localStorage.setItem("favorites", JSON.stringify(remover));
+    location.reload();
+}
+function m_excluir_favoritos_tudo(){
+    m_t_marcados();
+    if(m_vetor_marcados.length === 0){
+        if(confirm("Deseja excluir todos os pokemons da lista de favoritos!!")){
+            localStorage.removeItem("favorites");
+            location.reload();
+        }
+        else{
+            return;
+        }
+    }
+    else{
+        if(confirm("Deseja excluir todos os pokemons selecionados!!")){
+            for(let i = 0; i < m_vetor_marcados.length; i++){
+                let remover = JSON.parse(localStorage.getItem("favorites"));
+                remover = remover.filter(item => item !== m_vetor_marcados[i]);
+                localStorage.setItem("favorites", JSON.stringify(remover));
+            }
+            m_vetor_marcados = [];
+            location.reload();
+        }
+        else{
+            return;
+        }
+    }
+}
 async function m_times(){
     let time = getTeams();
     let cards = document.querySelector(".m_lista_times");
     if (time.length === 0) {
-        cards.innerHTML = '<p class="no-teams">Nenhum Pokémon adicionado ao time ainda.</p>';
+        cards.innerHTML = `
+            <p class="m_t_vazio">Nenhum Pokémon adicionado ao time ainda.</p>
+            <div class="m_t_carregar"></div>
+            `;
         return;
     }
     for(let id of time){
@@ -830,34 +956,6 @@ function m_excluir_time_tudo(){
 function getTeams() {
     return JSON.parse(localStorage.getItem('teams') || '[]');
 }
-m_jogo_poke();  
-m_carrosel(1);
-m_index_poke(m_calculo_pag());
-m_busca_id();
-
-document.addEventListener("mouseenter", (card) => {
-    let principal = document.querySelector(".m_c_3");
-    if (card.target.classList.contains("m_c_card") && !card.target.classList.contains("m_c_3")) {
-        card.target.style.transform = "scale(1.15)"
-        card.target.style.filter = "blur(0)"
-        card.target.style.zIndex = "996"
-        principal.style.transform = "scale(1.08)"
-        principal.style.filter = "blur(2px)"
-    }
-}, true);
-
-document.addEventListener("mouseleave", (card) => {
-    let principal = document.querySelector(".m_c_3");
-    if (card.target.classList.contains("m_c_card")) {
-        card.target.style.background = "";
-        card.target.style.transform = ""
-        card.target.style.filter = ""
-        card.target.style.zIndex = ""
-        principal.style.transform = ""
-        principal.style.filter = ""
-    }
-}, true);
-
 
 // -----login-----
 function m_login(){
@@ -934,23 +1032,6 @@ function m_lupa(){
     m_enviar_dados(pesquisa);
 }
 
-// ---------------times------------------
-if (location.pathname === "/times.html") {
-    m_times();
-}
-document.addEventListener("mouseenter", (card) => {
-    if (card.target.classList.contains("m_t_card")) {
-        let lixo = card.target.querySelector(".m_t_card_lixo");
-        lixo.style.marginLeft = "-5rem";
-    }
-}, true);
-
-document.addEventListener("mouseleave", (card) => {
-    if (card.target.classList.contains("m_t_card")) {
-        let lixo = card.target.querySelector(".m_t_card_lixo");
-        lixo.style.marginLeft = "-20rem";
-    }
-}, true);
 
 // ---------------------------marcar pokemon dos times--------------------------
 
@@ -960,4 +1041,91 @@ function m_t_marcados(){
     pokemons.forEach(p => {
         m_vetor_marcados.push(Number(p.value));
     });
+}
+function m_tocar_musica(){
+    if(m_j_musica == 1){
+        musica.play();
+        m_j_musica = 0;
+        document.querySelector(".m_j_titulo").innerHTML = `
+            <h1 onclick="m_tocar_quem()">Quem é esse Pokemon?</h1>
+            <img src="img/volume-up.svg" alt="volume-up" onclick="m_tocar_musica()">
+        `;
+    }
+    else if(m_j_musica == 0){
+        musica.pause();
+        m_j_musica = 1;
+        document.querySelector(".m_j_titulo").innerHTML = `
+            <h1 onclick="m_tocar_quem()">Quem é esse Pokemon?</h1>
+            <img src="img/volume-mute.svg" alt="volume-mute" onclick="m_tocar_musica()">
+        `;
+    }
+}
+
+// rodar funções]
+if (location.pathname.includes("times.html")) {
+    m_times();
+    document.addEventListener("mouseenter", (card) => {
+        if (card.target.classList.contains("m_t_card")) {
+            let lixo = card.target.querySelector(".m_t_card_lixo");
+            lixo.style.marginLeft = "-5rem";
+        }
+    }, true);
+
+    document.addEventListener("mouseleave", (card) => {
+        if (card.target.classList.contains("m_t_card")) {
+            let lixo = card.target.querySelector(".m_t_card_lixo");
+            lixo.style.marginLeft = "-20rem";
+        }
+    }, true);
+
+}
+if (location.pathname.includes("index.html")) {
+    m_index_poke(m_calculo_pag());
+    m_carrosel(1);
+    document.addEventListener("mouseenter", (card) => {
+        let principal = document.querySelector(".m_c_3");
+        if (card.target.classList.contains("m_c_card") && !card.target.classList.contains("m_c_3")) {
+            card.target.style.transform = "scale(1.15)"
+            card.target.style.filter = "blur(0)"
+            card.target.style.zIndex = "996"
+            principal.style.transform = "scale(1.08)"
+            principal.style.filter = "blur(2px)"
+        }
+    }, true);
+
+    document.addEventListener("mouseleave", (card) => {
+        let principal = document.querySelector(".m_c_3");
+        if (card.target.classList.contains("m_c_card")) {
+            card.target.style.background = "";
+            card.target.style.transform = ""
+            card.target.style.filter = ""
+            card.target.style.zIndex = ""
+            principal.style.transform = ""
+            principal.style.filter = ""
+        }
+    }, true);
+    setInterval(m_girar_vetor, 3000);
+}
+if (location.pathname.includes("pokemon.html")) {
+    m_busca_id();
+}
+if (location.pathname.includes("jogo.html")) {
+    m_jogo_poke();
+    m_tocar_musica();
+}
+if (location.pathname.includes("favorites.html")) {
+    loadFavorites();
+    document.addEventListener("mouseenter", (card) => {
+        if (card.target.classList.contains("m_f_card")) {
+            let lixo = card.target.querySelector(".m_t_card_lixo");
+            lixo.style.marginLeft = "-5rem";
+        }
+    }, true);
+
+    document.addEventListener("mouseleave", (card) => {
+        if (card.target.classList.contains("m_f_card")) {
+            let lixo = card.target.querySelector(".m_t_card_lixo");
+            lixo.style.marginLeft = "-20rem";
+        }
+    }, true);
 }

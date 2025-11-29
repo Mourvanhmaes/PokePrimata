@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokeprimata - Favoritos</title>
     <link rel="shortcut icon" href="img/logo_pokebola.svg" type="image/x-icon">
-    <link rel="stylesheet" href="favorites.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
@@ -70,160 +70,25 @@
         <img src="img/poke_primata.svg" alt="logo" class="m_menu_logo">
         <h1>POKEPRIMATA</h1>
     </div>
-    <main class="f_main">
-        <section class="fav-hero">
-            <h1 class="fav-title">Favoritos</h1>
-            <p class="fav-sub">Seus Pokémon favoritos estão aqui!</p>
-        </section>
-        <div class="fav-controls">
-            <button class="fav-clear" onclick="clearFavorites()">Limpar Todos</button>
-            <button class="back-btn" onclick="goToMain()">← Voltar à Lista Principal</button>
+    <main class="t_main">
+        <div class="m_times_titulo">
+            <h1>Favoritos</h1>
+            <h4>Seus companheiros preferidos ficam guardados aqui</h4>
         </div>
-        <div class="fav-list" id="favorites-container">
-            <!-- Os cards serão inseridos aqui via JavaScript -->
+        <div class="m_t_atalhos">
+            <div class="m_t_atalhos_apagar" onclick="m_excluir_favoritos_tudo()">
+                <img src="img/lixeira.svg" alt="lixeira">
+            </div>
+            <a href="index.html">
+                <div class="m_t_atalhos_voltar">
+                    <img src="img/caret-left.svg" alt="voltar">
+                </div>
+            </a>
+        </div>
+        <div class="m_lista_favoritos">
         </div>
     </main>
-
-    <script>
-        function getFavorites() {
-            return JSON.parse(localStorage.getItem('favorites') || '[]');
-        }
-
-        function getTeams() {
-            return JSON.parse(localStorage.getItem('teams') || '[]');
-        }
-
-        function clearFavorites() {
-            if (confirm('Tem certeza que deseja limpar todos os favoritos?')) {
-                localStorage.removeItem('favorites');
-                loadFavorites();
-            }
-        }
-
-        function toggleFavorite(id, btn) {
-            let favorites = getFavorites();
-            let isFav = favorites.includes(id);
-            if (isFav) {
-                favorites = favorites.filter(f => f !== id);
-                btn.innerHTML = '♥';
-                btn.style.color = 'red';
-            } else {
-                favorites.push(id);
-                btn.innerHTML = '♥';
-                btn.style.color = 'red';
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            // Remove o card imediatamente se removido de favoritos
-            if (!isFav) {
-                // Se foi adicionado, não remove
-            } else {
-                btn.closest('.fav-card').remove();
-                if (document.querySelectorAll('.fav-card').length === 0) {
-                    document.getElementById('favorites-container').innerHTML = '<p class="no-favorites">Nenhum Pokémon favorito adicionado ainda. <a href="index.html">Adicione alguns!</a></p>';
-                }
-            }
-        }
-
-        function toggleTeam(id, btn) {
-            let teams = getTeams();
-            let isTeam = teams.includes(id);
-            if (isTeam) {
-                teams = teams.filter(t => t !== id);
-                btn.innerHTML = '☆';
-                btn.style.color = 'gray';
-            } else {
-                teams.push(id);
-                btn.innerHTML = '★';
-                btn.style.color = 'gold';
-            }
-            localStorage.setItem('teams', JSON.stringify(teams));
-        }
-
-        async function loadFavorites() {
-            let favorites = getFavorites();
-            let container = document.getElementById('favorites-container');
-            
-            if (favorites.length === 0) {
-                container.innerHTML = '<p class="no-favorites">Nenhum Pokémon favorito adicionado ainda. <a href="index.html">Adicione alguns!</a></p>';
-                return;
-            }
-
-            container.innerHTML = ''; // Limpa o container
-
-            for (let id of favorites) {
-                try {
-                    let response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                    if (!response.ok) throw new Error('Pokémon não encontrado');
-                    let data = await response.json();
-                    let img = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
-                    let types = data.types.map(t => t.type.name);
-                    let teams = getTeams();
-                    let isTeam = teams.includes(id);
-                    let star = isTeam ? '★' : '☆';
-                    let starColor = isTeam ? 'gold' : 'gray';
-                    
-                    let cardHTML = `
-                        <div class="fav-card" onclick="viewPokemon(${data.id})" style="position: relative;">
-                            <div class="fav-info">
-                                <span class="fav-id">#${String(data.id).padStart(3, "0")}</span>
-                                <h2 class="fav-name">${data.name.toUpperCase()}</h2>
-                                <div class="m_poke_tipo">
-                                    ${types.map(t => `<h4 class="m_${t}">${t.charAt(0).toUpperCase() + t.slice(1)}</h4>`).join('')}
-                                </div>
-                            </div>
-
-                            <img src="${img}" alt="${data.name}" class="fav-img">
-
-                            <!-- Botões lado a lado no topo-direito -->
-                            <div class="fav-actions" style="position:absolute; top:10px; right:10px; display:flex; gap:8px; align-items:center;">
-                                <button
-                                    class="m_star_btn"
-                                    title="Adicionar ao Time"
-                                    onclick="toggleTeam(${data.id}, this); event.stopPropagation();"
-                                    style="border-radius:50%; width:30px; height:30px; border:none; background-color:rgba(255,255,255,0.7); font-size:16px; cursor:pointer; color:${starColor};">
-                                    ${star}
-                                </button>
-
-                                <button
-                                    class="m_heart_btn"
-                                    title="Remover dos Favoritos"
-                                    onclick="toggleFavorite(${data.id}, this); event.stopPropagation();"
-                                    style="color:red; position:static;">♥</button>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += cardHTML;
-                } catch (error) {
-                    console.error('Erro ao carregar Pokémon:', id, error);
-                    container.innerHTML += `<p class="no-favorites">Erro ao carregar Pokémon #${id}</p>`;
-                }
-            }
-        }
-
-        function viewPokemon(id) {
-            localStorage.setItem("dados", JSON.stringify(id));
-            window.location.href = "pokemon.html";
-        }
-
-        function goToMain() {
-            window.location.href = "index.html";
-        }
-
-        function m_menu_lateral() {
-            let menu = document.querySelector(".m_menu_lateral");
-            if (m_cont_menu == 0) {
-                menu.style.right = "0";
-                m_cont_menu = 1;
-            } else {
-                menu.style.right = "-100%";
-                m_cont_menu = 0;
-            }
-        }
-
-        let m_cont_menu = 0;
-
-        // Carrega os favoritos ao inicializar a página
-        window.addEventListener('load', loadFavorites);
+    <script src="script.js">
     </script>
       <footer>
         <div class="m_f_principal">
